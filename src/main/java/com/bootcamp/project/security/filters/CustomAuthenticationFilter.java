@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,7 +48,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
      * @throws AuthenticationException
      */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(@NotNull HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         // Using ObjectMapper to extract credentials from request body
         try {
             Map<String, String> credentials = new ObjectMapper().readValue(request.getInputStream(), Map.class);
@@ -79,7 +80,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
      * @throws ServletException
      */
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    protected void successfulAuthentication(@NotNull HttpServletRequest request,
+                                            @NotNull HttpServletResponse response,
+                                            FilterChain chain,
+                                            @NotNull Authentication authentication) throws IOException, ServletException {
         // Cast the authentication principal to User object
         User user = (User) authentication.getPrincipal();
         // Creating an HMAC256 encoded JWT with secret key

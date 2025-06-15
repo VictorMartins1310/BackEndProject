@@ -3,6 +3,7 @@ package com.bootcamp.project.security;
 import com.bootcamp.project.security.filters.CustomAuthenticationFilter;
 import com.bootcamp.project.security.filters.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,7 +46,7 @@ public class SecurityConfig {
          * @throws Exception if there is an issue getting the instance of the AuthenticationManager
          */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(@NotNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
     /**  Bean definition for SecurityFilterChain
@@ -55,7 +56,7 @@ public class SecurityConfig {
      * @throws Exception if there is an issue building the SecurityFilterChain
      */
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
         // CustomAuthenticationFilter instance created
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
         // set the URL that the filter should process
