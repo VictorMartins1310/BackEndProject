@@ -1,0 +1,23 @@
+### Get All Users
+GET http://localhost:8710/admin/users
+Authorization: Bearer {{Token}}
+### Post New Role
+POST http://localhost:8710/admin/roles
+Authorization: Bearer {{Token}}
+
+ROLE_TEST
+
+### Update User Details (Admin)
+PATCH http://localhost:8710/users
+Content-Type: Application/json
+Authorization: Bearer {{Token}}
+
+{
+  "firstName" : "Victor",
+  "lastName": "Martins",
+  "birthDate" : "1987-10-13"
+}
+
+### Delete User
+DELETE http://localhost:8710/admin/users/f0cab22f-ef83-4705-9947-af0717b657b2
+Authorization: Bearer {{Token}}

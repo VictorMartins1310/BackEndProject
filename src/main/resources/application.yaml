@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/Project
+    username: ironhacker
+    password: 1r0nh4ck3r
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mustache:
+    servlet:
+      cache: false
+  profiles:
+    active: dev
+server:
+  port: 8710

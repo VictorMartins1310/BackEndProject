@@ -1,0 +1,20 @@
+### Get Products of ALDI
+GET http://localhost:8710/todolist/shoppinglist/2
+Authorization: Bearer {{Token}}
+
+### Add Product to ALDI
+POST http://localhost:8710/todolist/shoppinglist/2/products
+Content-Type: Application/json
+Authorization: Bearer {{Token}}
+
+{
+  "name": "Coca Cola",
+  "brand": "Coca Cola Comp",
+  "price": 1.23,
+  "qty": 4,
+  "type": "Drink"
+}
+
+### Delete Shoping List
+DELETE http://localhost:8710/todolist/shoppinglist/3
+Authorization: Bearer {{Token}}

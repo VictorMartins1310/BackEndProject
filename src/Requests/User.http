@@ -1,0 +1,31 @@
+### Who I am?
+GET http://localhost:8710/users/me
+Authorization: Bearer {{Token}}
+
+### Get UserDetails
+GET http://localhost:8710/users
+Authorization: Bearer {{Token}}
+
+### Add an User
+POST http://localhost:8710/users/register
+Content-Type: Application/json
+Authorization: Bearer {{Token}}
+
+{
+  "email" : "TestUser@mail.de",
+  "password" : "Victor"
+}
+### Update Userdetails
+PATCH http://localhost:8710/users
+Content-Type: Application/json
+Authorization: Bearer {{Token}}
+
+{
+  "firstName" : "Victor",
+  "lastName" : "Fernandes Martins",
+  "birthDate": "1987-10-13"
+}
+
+### Get UserDetails by an Token
+GET http://localhost:8710/users
+Authorization: Bearer {{Token}}

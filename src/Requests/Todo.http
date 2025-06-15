@@ -1,0 +1,33 @@
+### Get All TODOLIST (Logged In)
+GET http://localhost:8710/todolist
+Authorization: Bearer {{Token}}
+
+### Get All TaskLists (Logged In)
+GET http://localhost:8710/todolist/tasklist
+Authorization: Bearer {{Token}}
+
+### Get All ShoppingLists (Logged In)
+GET http://localhost:8710/todolist/shoppinglist
+Authorization: Bearer {{Token}}
+
+### New TaskList to Logged In User
+POST http://localhost:8710/todolist/tasklist
+Authorization: Bearer {{Token}}
+Content-Type: Application/json
+
+{
+  "todoListName": "TaskList HomeWork"
+}
+
+### Add new ShoppingList with SuperMarket LIDL
+POST http://localhost:8710/todolist/shoppinglist
+Content-Type: Application/json
+Authorization: Bearer {{Token}}
+
+{
+  "marketName": "LIDL"
+}
+
+### Update First ShoppingList to Logged In User
+PATCH http://localhost:8710/todolist/shoppinglist/2?marketname=Updated ShopName
+Authorization: Bearer {{Token}}
