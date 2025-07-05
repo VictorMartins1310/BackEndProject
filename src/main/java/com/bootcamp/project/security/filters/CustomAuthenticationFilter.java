@@ -79,6 +79,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
      * @throws IOException
      * @throws ServletException
      */
+
+    int time2Expire(int days, int hours, int minutes){
+        int min = 60 * 1000;
+        int h = 60 * min;
+        int d = 24 * h;
+
+        return days*d + hours*h + minutes*min;
+    }
+
+
     @Override
     protected void successfulAuthentication(@NotNull HttpServletRequest request,
                                             @NotNull HttpServletResponse response,
@@ -89,9 +99,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // Creating an HMAC256 encoded JWT with secret key
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         // Adding user details and roles to the token
+
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 2 * 60 * 60 * 1000)) // for generating a 2 hours valid Token
+                .withExpiresAt(new Date(System.currentTimeMillis() + time2Expire(0,0,25))) // for generating a 2 hours valid Token
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
