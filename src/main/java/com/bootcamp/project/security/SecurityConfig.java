@@ -1,5 +1,6 @@
 package com.bootcamp.project.security;
 
+import java.util.List;
 import com.bootcamp.project.security.filters.CustomAuthenticationFilter;
 import com.bootcamp.project.security.filters.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
     /**
      * This is the main configuration class for security in the application. It enables web security,
@@ -63,6 +68,11 @@ public class SecurityConfig {
         customAuthenticationFilter.setFilterProcessesUrl("/login");
         // disable CSRF protection
         http.csrf().disable();
+
+        http
+                .cors()  // CORS aktivieren
+            ;
+
         // set the session creation policy to stateless
         http.sessionManagement().sessionCreationPolicy( STATELESS);
         // set up authorization for different request matchers and user roles
@@ -102,5 +112,18 @@ public class SecurityConfig {
 
         // Build the security filter chain to be returned.
         return http.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173")); // frontend URL
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true); // allow cookies/tokens
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return new CorsFilter(source);
     }
 }

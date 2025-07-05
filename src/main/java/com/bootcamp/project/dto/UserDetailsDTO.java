@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserDetailsDTO {
     @NotBlank(message = "E-Mail is Mandatory")
-    @Email(message = "E-Mail dont Follow rules")
+    @Email(message = "E-Mail don't Follow rules")
     private String email;
     @NotBlank
     @Max(message = "Reached Maximum of (64) Characters", value = 64)
