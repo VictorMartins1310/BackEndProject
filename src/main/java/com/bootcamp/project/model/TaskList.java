@@ -17,5 +17,8 @@ public class TaskList extends ToDoList{
     private List<Task> tasks = new ArrayList<>();
 
     public void addTask(Task newTask){ tasks.add(newTask); }
-    public TaskList(String todoListName, User user) { super(todoListName, user); }
+    public TaskList(String todoListName, User user) {
+        super(todoListName, user);
+        super.type = "tasklist";
+    }
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class ToDoListDTO {
+    private Long todoListID;
     @NotBlank
     @Max(message = "Reached Maximum of (64) Characters", value = 64)
     private String todoListName;
@@ -13,4 +14,5 @@ public class ToDoListDTO {
     private Date creationDate;
     @NotNull
     protected Boolean active;
+    protected String type;
 }

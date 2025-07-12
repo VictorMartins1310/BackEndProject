@@ -28,6 +28,7 @@ public class ShoppingList extends ToDoList{
     }
     public ShoppingList(User user, String marketName) {
         super(marketName + " Shopping List", user);
+        super.type = "shoppinglist";
         this.marketName = marketName;
     }
 }

@@ -69,6 +69,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         }
     }
 
+    int time2Expire(int days, int hours, int minutes){
+        int min = 60 * 1000;
+        int h = 60 * min;
+        int d = 24 * h;
+
+        return days*d + hours*h + minutes*min;
+    }
+
     /**
      * Method is called if the user is successfully authenticated
      *
@@ -79,16 +87,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
      * @throws IOException
      * @throws ServletException
      */
-
-    int time2Expire(int days, int hours, int minutes){
-        int min = 60 * 1000;
-        int h = 60 * min;
-        int d = 24 * h;
-
-        return days*d + hours*h + minutes*min;
-    }
-
-
     @Override
     protected void successfulAuthentication(@NotNull HttpServletRequest request,
                                             @NotNull HttpServletResponse response,

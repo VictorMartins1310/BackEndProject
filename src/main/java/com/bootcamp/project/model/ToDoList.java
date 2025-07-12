@@ -15,6 +15,7 @@ public class ToDoList {
     private Long todoListID;
     private Date creationDate = new Date();
     private String todoListName;
+    protected String type;
     protected Boolean active; // If False it can be deleted ob DB
     @ManyToOne
     private User user;
