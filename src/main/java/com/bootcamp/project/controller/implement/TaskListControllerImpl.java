@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "todolist/tasklist")
+@RequestMapping(value = "api/todolist/tasklist")
 public class TaskListControllerImpl implements TaskListController {
     private final TaskListService taskListService;
     private final UserService userService;

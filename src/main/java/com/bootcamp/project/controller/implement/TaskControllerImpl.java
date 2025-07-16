@@ -21,7 +21,7 @@ import java.util.List;
 */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(name = "tasklist", value = "todolist/tasklist/{taskLID}")
+@RequestMapping(name = "tasklist", value = "api/todolist/tasklist/{taskLID}")
 public class TaskControllerImpl implements TaskController {
     private final TaskListService taskListService;
     private final TaskService taskService;

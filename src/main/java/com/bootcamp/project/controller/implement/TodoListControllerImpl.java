@@ -16,7 +16,7 @@ import java.util.List;
 /** This controller only have one function: Show All Lists (Task Lists & Shopping Lists) */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(name = "todoList", value = "todolist")
+@RequestMapping(name = "todoList", value = "api/todolist")
 public class TodoListControllerImpl implements TodoListController {
     // On this Controller is not so much to do
     private final ToDoListService toDoListService;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(name = "products", value = "todolist/shoppinglist/{idOfShoppingList}")
+@RequestMapping(name = "products", value = "api/todolist/shoppinglist/{idOfShoppingList}")
 public class ProductControllerImpl implements ProductController {
     private final ShoppingListService shoppingService;
     private final ProductService productService;

@@ -45,7 +45,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // If the request is for the API Login endpoint, pass the request to the next filter in the chain
-        if (request.getServletPath().equals("/login")) {
+        if (request.getServletPath().equals("/api/login")) {
             filterChain.doFilter(request, response);
         } else {
             // If the request is not for the API Login endpoint, check if the request has the authorization header

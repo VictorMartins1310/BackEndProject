@@ -20,7 +20,7 @@ import java.util.List;
 */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(name = "shoppinglist", value = "todolist/shoppinglist")
+@RequestMapping(name = "shoppinglist", value = "api/todolist/shoppinglist")
 public class ShoppingListControllerImpl implements ShoppingListController{
     private final ShoppingListService shoppingLService;
     private final UserService userService;

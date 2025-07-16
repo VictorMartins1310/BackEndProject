@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 /** A controller for User, here a User can Register and Update his Information */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(name = "users", value = "users")
+@RequestMapping(name = "users", value = "api/users")
 public class UserControllerImpl implements UserController {
     private final UserService userService;
 

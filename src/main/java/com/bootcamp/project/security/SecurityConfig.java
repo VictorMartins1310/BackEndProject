@@ -65,43 +65,32 @@ public class SecurityConfig {
         // CustomAuthenticationFilter instance created
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
         // set the URL that the filter should process
-        customAuthenticationFilter.setFilterProcessesUrl("/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         // disable CSRF protection
         http.csrf().disable();
 
-        http
-                .cors()  // CORS aktivieren
-            ;
+        http.cors();  // CORS aktivieren
 
         // set the session creation policy to stateless
         http.sessionManagement().sessionCreationPolicy( STATELESS);
         // set up authorization for different request matchers and user roles
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/login/**").permitAll()
-                .requestMatchers("/admin/users").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
+                .requestMatchers("/api/login/**").permitAll()
+                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
 
-                .requestMatchers(GET, "/users/me").permitAll()
-                .requestMatchers(POST, "/users").permitAll()
-                .requestMatchers(PATCH, "/users").permitAll()
+                .requestMatchers(GET, "/api/users/me").permitAll()
+                .requestMatchers(POST, "/api/users").permitAll()
+                .requestMatchers(PATCH, "/api/users").permitAll()
 
-                .requestMatchers(GET, "/users").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, "/users").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(GET,
+                        "/api/users", "/api/todolist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, "/api/users").hasAnyAuthority("ROLE_USER")
 
-                .requestMatchers(GET, "/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(POST, "/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, "/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(DELETE, "/todolist/**").hasAnyAuthority("ROLE_USER")
-
-//                Follow URIs don't need anymore
-
-//                .requestMatchers(GET, "/todolist/tasklist/**").hasAnyAuthority("ROLE_USER")
-//                .requestMatchers(POST, "/todolist/tasklist/**").hasAnyAuthority("ROLE_USER")
-//                .requestMatchers(PATCH, "/todolist/tasklist/**").hasAnyAuthority("ROLE_USER")
-
-//                .requestMatchers(GET, "/todolist/shoppinglist/**").hasAnyAuthority("ROLE_USER")
-//                .requestMatchers(POST, "/todolist/shoppinglist/**").hasAnyAuthority("ROLE_USER")
-//                .requestMatchers(PATCH, "/todolist/shoppinglist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(POST, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(DELETE, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
 
 
                 .anyRequest().authenticated());

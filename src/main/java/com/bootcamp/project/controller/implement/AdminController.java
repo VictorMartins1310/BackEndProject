@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(name = "admin", value = "admin")
+@RequestMapping(name = "admin", value = "api/admin")
 public class AdminController {
     private final UserService userService;
 
