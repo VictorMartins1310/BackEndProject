@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -67,12 +68,12 @@ public class SecurityConfig {
         // set the URL that the filter should process
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         // disable CSRF protection
-        http.csrf().disable();
+        http.csrf(csrf -> csrf.disable());
 
-        http.cors();  // CORS aktivieren
+        http.cors(Customizer.withDefaults());  // CORS aktivieren
 
         // set the session creation policy to stateless
-        http.sessionManagement().sessionCreationPolicy( STATELESS);
+        http.sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
         // set up authorization for different request matchers and user roles
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
