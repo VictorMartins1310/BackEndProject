@@ -23,8 +23,10 @@ import java.util.UUID;
 public class AdminController {
     private final UserService userService;
 
-    /** Save a new role
-     * @param role role to be saved
+    /**
+     * Save a new role
+     * @param role
+     * @return
      */
     @PostMapping(value = "/roles")
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run BackEnd Application",
+            "type": "java",
+            "request": "launch",
+            "mainClass": "com.bootcamp.project.ProjectApplication",
+            "projectName": "Project",
+            "console": "integratedTerminal"
+        }
+    ]
+}
