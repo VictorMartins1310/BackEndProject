@@ -77,7 +77,11 @@ public class SecurityConfig {
         // set up authorization for different request matchers and user roles
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
+
+                .requestMatchers("/types").permitAll()
                 .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
+
+
                 .requestMatchers("/api/login/**").permitAll()
                 .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
 
