@@ -100,7 +100,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + time2Expire(0,0,25))) // for generating a 2 hours valid Token
+                .withExpiresAt(new Date(System.currentTimeMillis() + time2Expire(0,8,0))) // for generating a 2 hours valid Token
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
