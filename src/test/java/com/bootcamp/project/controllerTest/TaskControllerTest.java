@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -38,10 +38,11 @@ public class TaskControllerTest {
     @Autowired private ObjectMapper objectMapper;
     @Autowired private WebApplicationContext webApplicationContext;
 
-    @MockBean private TaskListService taskListService;
-    @MockBean private TaskService taskService;
-    @MockBean private TaskMapper taskMapper;
-    @MockBean private TodoListMapper taskListMapper;
+    @MockitoBean
+    private TaskListService taskListService;
+    @MockitoBean private TaskService taskService;
+    @MockitoBean private TaskMapper taskMapper;
+    @MockitoBean private TodoListMapper taskListMapper;
 
     private final Task task1 = new Task();
     private final Task task2 = new Task();
