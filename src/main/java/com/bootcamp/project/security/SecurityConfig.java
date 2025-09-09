@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import org.springframework.context.annotation.Profile;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -79,6 +81,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((requests) -> requests
 
                 .requestMatchers("/types").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
 
 
@@ -108,6 +111,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Profile({"dev"})
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
