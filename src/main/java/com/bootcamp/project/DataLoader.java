@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Profile("dev")
+@Profile({"dev", "prod"})
 public class DataLoader implements ApplicationListener<ApplicationReadyEvent> {
     private final UserService userService;
     private final ShoppingListService shoppingListService;
