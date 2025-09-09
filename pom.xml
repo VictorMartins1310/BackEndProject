@@ -10,12 +10,22 @@
     </parent>
     <groupId>com.bootcamp</groupId>
     <artifactId>Project</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
-    <name>Project</name>
+    <version>${revision}</version>
+    <name>TodoListApp</name>
     <description>Project</description>
     <properties>
         <java.version>21</java.version>
-    </properties>
+        <maven.build.timestamp.format>yyyyMM</maven.build.timestamp.format><!-- Format für maven.build.timestamp: yyyyMM -->
+        <major>1</major>
+        <minor>1</minor>
+        <revision>${major}.${maven.build.timestamp}X${minor}</revision>
+     </properties>
+    <scm>
+        <connection>scm:git:https://github.com/VictorMartins1310/BackEndProject.git</connection>
+        <!--<developerConnection>scm:git:ssh://git@github.com/VictorMartins1310/BackEndProject.git</developerConnection>-->
+        <url>https://github.com/VictorMartins1310/BackEndProject</url>
+        <!--<tag>HEAD</tag>-->
+    </scm>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -24,6 +34,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.224</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
@@ -107,6 +123,23 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
                 </configuration>
             </plugin>
         </plugins>
