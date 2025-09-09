@@ -15,6 +15,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @Entity
 @Data
 @RequiredArgsConstructor
+@Table(name = "Users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
