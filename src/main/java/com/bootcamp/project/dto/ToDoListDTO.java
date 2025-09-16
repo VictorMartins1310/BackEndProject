@@ -12,7 +12,5 @@ public class ToDoListDTO {
     private String todoListName;
     @NotNull
     private Date creationDate;
-    @NotNull
-    protected Boolean active;
     protected String type;
 }
