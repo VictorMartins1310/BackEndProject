@@ -21,6 +21,17 @@ public class UserControllerImpl implements UserController {
 
     private final UserDetailsMapper userDetailsMapper;
 
+    // private fields
+    private User loggedUser;
+
+    /**
+     * This function get the Authenticated User
+     * @return Authenticated User
+     */
+    private User getAuthUser() {
+        return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDetailsDTO newUser(@RequestBody LoginDTO loginData){
@@ -29,23 +40,24 @@ public class UserControllerImpl implements UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public UserDetailsDTO showDetails(){
-        return userDetailsMapper.toDto(userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+        loggedUser = getAuthUser();
+        return userDetailsMapper.toDto(loggedUser);
     }
     @PatchMapping(value = "/register/details")
     @ResponseStatus(HttpStatus.OK)
     public UserDetailsDTO updateDetailsOnRegister(@RequestBody User userDetails) {
-        User loggedUser = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        loggedUser = getAuthUser();
         return userDetailsMapper.toDto(userService.updateDetails(loggedUser, userDetails.getFirstName(), userDetails.getLastName(), userDetails.getBirthDate().toString()));
     }
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
     public UserDetailsDTO updateDetails(@RequestBody User userDetails) {
-        User loggedUser = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        loggedUser = getAuthUser();
         return userDetailsMapper.toDto(userService.updateDetails(loggedUser, userDetails.getFirstName(), userDetails.getLastName(), userDetails.getBirthDate().toString()));
     }
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
     public User getMine(){
-        return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return getAuthUser();
     }
 }
