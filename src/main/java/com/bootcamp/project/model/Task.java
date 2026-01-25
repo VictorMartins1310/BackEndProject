@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Data
 @RequiredArgsConstructor
-public class Task {
+public class Task extends TaskList{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskID;

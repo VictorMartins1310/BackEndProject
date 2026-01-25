@@ -2,6 +2,9 @@
 The Project is mainly a Todo-List, including an Shopping List, where you can Put your 
 # Class Diagram
 ![img.png](img.png)
+# Update Information
+Class Diagram is not up to date, it is on changes, the model was for the bootcamp and where ShoppingList and Tasklist is heritage of TodoList, just for demonstration of acknowledge.
+
 # Setup
 The Project needs a MySQL Database with name Project
 # Technologies Used

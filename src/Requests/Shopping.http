@@ -15,6 +15,6 @@ Authorization: Bearer {{Token}}
   "type": "Drink"
 }
 
-### Delete Shoping List
+### Delete Shopping List
 DELETE http://localhost:8710/todolist/shoppinglist/3
 Authorization: Bearer {{Token}}

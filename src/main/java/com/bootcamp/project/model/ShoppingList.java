@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @DynamicUpdate
 @RequiredArgsConstructor
-public class ShoppingList extends ToDoList{
+public class ShoppingList extends TaskList{
     private String marketName;
     @OneToMany
     private List<Product> products  = new ArrayList<>();
@@ -27,8 +27,6 @@ public class ShoppingList extends ToDoList{
         return total;
     }
     public ShoppingList(User user, String marketName) {
-        super(marketName + " Shopping List", user);
-        super.type = "shoppinglist";
         this.marketName = marketName;
     }
 }

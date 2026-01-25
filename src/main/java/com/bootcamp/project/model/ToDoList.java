@@ -15,15 +15,14 @@ public class ToDoList {
     private Long todoListID;
     private Date creationDate = new Date();
     private String todoListName;
-    protected String type;
-    protected Boolean active; // If False it can be deleted ob DB
-    @ManyToOne
+    //protected String type;
+    //protected Boolean active; // If False it can be deleted ob DB
+    @OneToMany(cascade = CascadeType.ALL)
     private User user;
+
+
     public ToDoList(String todoListName, User user) {
         this.todoListName = todoListName;
         this.user = user;
-        this.active = true;
     }
-    /** Function that deactivate a List */
-    public void deactivateList(){ this.active = false; }
 }

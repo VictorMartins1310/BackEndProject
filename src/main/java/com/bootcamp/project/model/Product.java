@@ -12,21 +12,21 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productID;
-    private String name;
-    private String brand;
+    private Long    productID;
+    private String  name;
+    private String  brand;
     private BigDecimal price;
-    private int qty;
+    private int      qty;
     private ProductType type;
     /** True means products bought, False means to be bought */
     private Boolean bought = false;
 
     public Product(String name, String brand, BigDecimal price, int qty, ProductType type) {
-        this.name = name;
-        this.brand = brand;
-        this.price = price;
-        this.qty = qty;
-        this.type = type;
+        this.name   = name;
+        this.brand  = brand;
+        this.price  = price;
+        this.qty    = qty;
+        this.type   = type;
     }
 
     public Product productBought(int qty){

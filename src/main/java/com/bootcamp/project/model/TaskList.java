@@ -8,17 +8,13 @@ import lombok.RequiredArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @RequiredArgsConstructor
-public class TaskList extends ToDoList{
+public class TaskList {
     @OneToMany
     private List<Task> tasks = new ArrayList<>();
 
     public void addTask(Task newTask){ tasks.add(newTask); }
-    public TaskList(String todoListName, User user) {
-        super(todoListName, user);
-        super.type = "tasklist";
-    }
+
 }

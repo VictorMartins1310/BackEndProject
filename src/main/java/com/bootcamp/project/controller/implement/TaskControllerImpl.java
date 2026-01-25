@@ -21,31 +21,31 @@ import java.util.List;
 */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(name = "tasklist", value = "api/todolist/tasklist/{taskLID}")
+@RequestMapping(name = "tasklist", value = "api/todolist/tasklist")
 public class TaskControllerImpl implements TaskController {
     private final TaskListService taskListService;
     private final TaskService taskService;
     private final TaskMapper taskMapper;
     private final TodoListMapper taskListMapper;
-    @PostMapping
+    @PostMapping(value = "/{taskLID}")
     @ResponseStatus(HttpStatus.CREATED)
     public List<TaskDTO> addTask(@PathVariable("taskLID") Long taskID, @RequestBody TaskDTO taskDTO){
         Task task = taskMapper.toEntity(taskDTO);
         TaskList taskList = taskListService.addTask2List(taskID, task);
         return taskMapper.toDto(taskService.getAllTasksOfTaskList(taskList));
     }
-    @GetMapping
+    @GetMapping(value = "/{taskLID}/tasks")
     @ResponseStatus(HttpStatus.OK)
     public TaskListTasksDTO getAllTasksOfTaskList(@PathVariable("taskLID") Long taskID){
         return taskListMapper.toDTO(taskListService.getTaskListByID(taskID));
     }
     @Override
-    @PatchMapping(value = "/task/{taskID}/done")
+    @PatchMapping(value = "/{taskLID}/task/{taskID}/done")
     @ResponseStatus(HttpStatus.OK)
     public void taskDone(@PathVariable("taskID") Long idTask) {
         taskService.taskDone(idTask);
     }
-    @PatchMapping(value ="/task/{taskID}")
+    @PatchMapping(value = "/{taskLID}/task/{taskID}")
     @ResponseStatus(HttpStatus.OK)
     public TaskDTO updateTask(@PathVariable("taskID") Long idTask, @RequestParam("tname") String taskName){
         return taskMapper.toDto(taskService.updateTaskName(idTask, taskName));
