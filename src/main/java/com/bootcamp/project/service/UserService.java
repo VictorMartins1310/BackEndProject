@@ -2,7 +2,6 @@ package com.bootcamp.project.service;
 
 import com.bootcamp.project.exception.ProjectException;
 import com.bootcamp.project.model.Role;
-import com.bootcamp.project.model.TaskList;
 import com.bootcamp.project.model.User;
 import com.bootcamp.project.repos.RoleRepository;
 import com.bootcamp.project.repos.UserRepository;
@@ -23,8 +22,8 @@ public class UserService implements UserDetailsService {
     // Repositories Section
     private final UserRepository userRepo;
     private final RoleRepository roleRepository;
+
     // Service Section
-    private final TaskListService taskListService;
     private final ShoppingListService shoppingListService;
 
     /**  Injects a bean of type PasswordEncoder into this class.
@@ -70,10 +69,7 @@ public class UserService implements UserDetailsService {
      */
     public User newUser(String email, String password){
         User user = new User(email, password);
-        User savedUser = save(user, "ROLE_USER");
-        TaskList taskList = new TaskList("First Task List", savedUser);
-        taskListService.newTaskList(savedUser, taskList);
-        return savedUser;
+        return save(user, "ROLE_USER");
     }
     // UserDetails Section
     public User findByUserID(UUID id){
@@ -115,15 +111,13 @@ public class UserService implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
         }
     }
-    public void deleteUser(User user){
-        userRepo.delete(user);
-    }
+
     public void deleteUserByID(UUID userID){
         User user = findByUserID(userID);
         if (user == null)
             throw new ProjectException("User not Found");
-        taskListService.deleteTasksLists(user);
+        //taskListService.deleteTasksLists(user);
         shoppingListService.deleteShoppingLists(user);
-        deleteUser(user);
+        userRepo.delete(user);
     }
 }
