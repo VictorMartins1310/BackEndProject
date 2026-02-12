@@ -6,6 +6,7 @@ target/
 
 /src/main/resources/static/**
 /src/data/**
+/src/data/
 
 ### STS ###
 .apt_generated
@@ -33,4 +34,4 @@ build/
 !**/src/test/**/build/
 
 ### Project Files ###
-C:\Users\VictorMartins\IdeaProjects\Project\src\Requests\http-client.private.env.json
+/src/Requests/http-client.private.env.json
