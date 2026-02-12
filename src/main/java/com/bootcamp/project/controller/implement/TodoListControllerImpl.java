@@ -3,9 +3,8 @@ package com.bootcamp.project.controller.implement;
 import com.bootcamp.project.controller.TodoListController;
 import com.bootcamp.project.dto.ToDoListDTO;
 import com.bootcamp.project.mappers.TodoListMapper;
-import com.bootcamp.project.model.TodoItem;
 import com.bootcamp.project.model.User;
-import com.bootcamp.project.service.TodoListService;
+import com.bootcamp.project.service.TodoItemService;
 import com.bootcamp.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,7 @@ import java.util.List;
 @RequestMapping(name = "todoList", value = "api/todolist")
 public class TodoListControllerImpl implements TodoListController {
     // On this Controller is not so much to do
-    private final TodoListService toDoListService;
+    private final TodoItemService toDoListService;
     private final UserService userService;
     private final TodoListMapper todoListMapper;
 
