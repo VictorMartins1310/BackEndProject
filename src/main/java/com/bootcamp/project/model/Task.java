@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class Task extends TodoItem {
     @NotNull
     private String task;
+    private Frequency frequency;
 
     public void markTaskCompleted(){ super.setCompleted(true); }
 
