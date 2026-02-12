@@ -1,6 +1,5 @@
 package com.bootcamp.project.service;
 
-import com.bootcamp.project.exception.ProjectException;
 import com.bootcamp.project.model.TodoItem;
 import com.bootcamp.project.model.User;
 import com.bootcamp.project.repos.TodoListRepository;
