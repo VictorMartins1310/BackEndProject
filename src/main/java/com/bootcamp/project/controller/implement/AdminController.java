@@ -28,7 +28,7 @@ public class AdminController {
 
 
 
-    @GetMapping("/types")
+    @GetMapping("api/types")
     public List<String> getTypeValues() {
         return Arrays.stream(ProductType.values())
                 .map(Enum::name)
