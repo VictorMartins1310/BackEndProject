@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** This Controller is destined for the Shopping List
@@ -48,18 +49,36 @@ public class ShoppingListControllerImpl implements ShoppingListController{
         shoppingList = shoppingLService.newShoppingList(loggedUser, newShoppingData.getMarketName());
         return shoppingLMapper.toDto(shoppingList);
     }
+
+    /**
+     * Function to get All ShoppingList's by Authenticated User
+     * @return A list of ShoppingList
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ShoppingListDTO> showShoppingLists(){
+        // TODO Re Develop no user in shoppinglist
         loggedUser = getAuthUser();
-        return shoppingLMapper.toShoppingListDtos(shoppingLService.getShoppingLists(loggedUser));
+        List<ShoppingList> emptyList = new ArrayList<>();
+        return shoppingLMapper.toDTO(emptyList);
+        //return shoppingLMapper.toShoppingListDtos(shoppingLService.getShoppingLists(loggedUser));
     }
+    /* Move to ProductsController
     @GetMapping(value = "/{shoppingLID}")
     @ResponseStatus(HttpStatus.OK)
     public ShoppingListProductsDTO showShoppingList(@PathVariable("shoppingLID") Long id){
         shoppingList = shoppingLService.getShoppingList(id);
         return shoppingLMapper.toDTO(shoppingList);
     }
+    */
+
+    @GetMapping(value = "/{shoppingLID}")
+    @ResponseStatus(HttpStatus.OK)
+    public ShoppingListProductsDTO showShoppingList(@PathVariable("shoppingLID") Long id){
+        shoppingList = shoppingLService.getShoppingList(id);
+        return shoppingLMapper.toDTO(shoppingList);
+    }
+
     @PatchMapping(value = "/{shoppingLID}")
     public ShoppingList updateShoppingList(@PathVariable("shoppingLID") Long id, @RequestParam(value = "todoListName", required = false) String todoListName , @RequestParam("marketName") String marketName){
         shoppingList = shoppingLService.updateShoppingList(id, todoListName, marketName);

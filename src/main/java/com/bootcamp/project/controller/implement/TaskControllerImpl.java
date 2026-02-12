@@ -2,18 +2,15 @@ package com.bootcamp.project.controller.implement;
 
 import com.bootcamp.project.controller.TaskController;
 import com.bootcamp.project.dto.TaskDTO;
-import com.bootcamp.project.dto.TaskListTasksDTO;
 import com.bootcamp.project.mappers.TaskMapper;
-import com.bootcamp.project.mappers.TodoListMapper;
 import com.bootcamp.project.model.Task;
-import com.bootcamp.project.model.TaskList;
-import com.bootcamp.project.service.TaskListService;
+import com.bootcamp.project.model.User;
 import com.bootcamp.project.service.TaskService;
+import com.bootcamp.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /** This Controller is destined for Tasks
 * It can Create and Update a Task
@@ -23,28 +20,39 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(name = "tasklist", value = "api/todolist/tasklist")
 public class TaskControllerImpl implements TaskController {
-    private final TaskListService taskListService;
     private final TaskService taskService;
+    private final UserService userService;
+
     private final TaskMapper taskMapper;
-    private final TodoListMapper taskListMapper;
-    @PostMapping(value = "/{taskLID}")
+
+    private User loggedUser;
+
+    private User getAuthUser() {
+        return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public List<TaskDTO> addTask(@PathVariable("taskLID") Long taskID, @RequestBody TaskDTO taskDTO){
-        Task task = taskMapper.toEntity(taskDTO);
-        TaskList taskList = taskListService.addTask2List(taskID, task);
-        return taskMapper.toDto(taskService.getAllTasksOfTaskList(taskList));
+    public Task addTask(@RequestBody TaskDTO taskDTO){
+        loggedUser = getAuthUser();
+        Task newTask = taskMapper.toEntity(taskDTO);
+        newTask.setUser(getAuthUser());
+        return taskService.newTask(newTask);
     }
-    @GetMapping(value = "/{taskLID}/tasks")
+
+    @GetMapping(value = "/{taskLID}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskListTasksDTO getAllTasksOfTaskList(@PathVariable("taskLID") Long taskID){
-        return taskListMapper.toDTO(taskListService.getTaskListByID(taskID));
+    public Task getTaskList(@PathVariable("taskLID") Long idTask){
+        return taskService.getTask(idTask);
     }
-    @Override
-    @PatchMapping(value = "/{taskLID}/task/{taskID}/done")
+
+    @PatchMapping(value = "/{taskID}/done")
     @ResponseStatus(HttpStatus.OK)
-    public void taskDone(@PathVariable("taskID") Long idTask) {
-        taskService.taskDone(idTask);
+    public void markTaskCompleted(@PathVariable("taskID") Long idTask){
+        taskService.markTaskCompleted(idTask);
+        //return taskService.getTask(idTask);
     }
+
     @PatchMapping(value = "/{taskLID}/task/{taskID}")
     @ResponseStatus(HttpStatus.OK)
     public TaskDTO updateTask(@PathVariable("taskID") Long idTask, @RequestParam("tname") String taskName){

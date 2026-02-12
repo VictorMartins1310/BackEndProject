@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long> {
-    Optional<ShoppingList> getShoppingListByTodoListID(Long id);
+    Optional<ShoppingList> getShoppingListByTodoID(Long id);
     List<ShoppingList> findShoppingListsByUser(User user);
     void deleteShoppingListsByUser(User user);
-    Integer countShoppingListsByUser(User user);
-    Optional<ShoppingList> findShoppingListByTodoListID(Long ID);
 }

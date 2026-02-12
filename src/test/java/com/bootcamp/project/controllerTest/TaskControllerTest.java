@@ -5,8 +5,6 @@ import com.bootcamp.project.dto.TaskDTO;
 import com.bootcamp.project.mappers.TaskMapper;
 import com.bootcamp.project.mappers.TodoListMapper;
 import com.bootcamp.project.model.Task;
-import com.bootcamp.project.model.TaskList;
-import com.bootcamp.project.service.TaskListService;
 import com.bootcamp.project.service.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,19 +1,19 @@
 package com.bootcamp.project.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Data
 @RequiredArgsConstructor
-public class Task extends TaskList{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long taskID;
+public class Task extends TodoItem {
+    @NotNull
     private String task;
-    /** True means Done, False to be Do */
-    private Boolean done = false;
 
-    public void taskDone(){ this.done = true; }
+    public void markTaskCompleted(){ super.setCompleted(true); }
+
 }

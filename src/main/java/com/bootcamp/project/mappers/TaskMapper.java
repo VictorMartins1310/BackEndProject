@@ -12,6 +12,6 @@ import java.util.List;
 public interface TaskMapper {
     TaskDTO toDto (Task dto);
     List<TaskDTO> toDto (List<Task> dto);
-    @Mapping(target = "taskID", ignore = true)
     Task toEntity (TaskDTO entity);
+
 }

@@ -11,9 +11,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@DynamicUpdate
+//@DynamicUpdate
 @RequiredArgsConstructor
-public class ShoppingList extends TaskList{
+public class ShoppingList extends TodoItem{
     private String marketName;
     @OneToMany
     private List<Product> products  = new ArrayList<>();
@@ -28,5 +28,6 @@ public class ShoppingList extends TaskList{
     }
     public ShoppingList(User user, String marketName) {
         this.marketName = marketName;
+        super.setUser(user);
     }
 }

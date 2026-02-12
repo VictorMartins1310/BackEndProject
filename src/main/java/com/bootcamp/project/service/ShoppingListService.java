@@ -18,20 +18,23 @@ public class ShoppingListService {
     private final ProductService prodService;
 
     public Integer countShoppingListsByUser(User user){
-        return shoppingListRepository.countShoppingListsByUser(user);
+        // Function maybe desnecessary
+        return 1;
+        //return shoppingListRepository.countShoppingListsByUser(user);
     }
 
     public ShoppingList getShoppingList(Long id) {
-        if (shoppingListRepository.getShoppingListByTodoListID(id).isEmpty())
+        if (shoppingListRepository.getShoppingListByTodoID(id).isEmpty())
             throw new ProjectException("Shopping List " + id + " Not Found");
-        return shoppingListRepository.getShoppingListByTodoListID(id).get();
+        return shoppingListRepository.getShoppingListByTodoID(id).get();
     }
 
-    public List<ShoppingList> getShoppingLists(User user) {
+    // No longer in use
+    /*public List<ShoppingList> getShoppingLists(User user) {
         if (shoppingListRepository.findShoppingListsByUser(user).isEmpty())
             throw new ProjectException("Shopping List Not Found");
         return shoppingListRepository.findShoppingListsByUser(user);
-    }
+    }*/
 
     public ShoppingList newShoppingList(User user, String marketName) {
         ShoppingList shoppingList = new ShoppingList(user, marketName);
@@ -39,15 +42,15 @@ public class ShoppingListService {
     }
 
     public ShoppingList updateShoppingList(Long id, String toDoListName, String marketName) {
-        if (shoppingListRepository.findShoppingListByTodoListID(id).isEmpty())
-            throw new ProjectException("Shopping List " + id + " Not Found");
-        ShoppingList shoppingList = shoppingListRepository.findShoppingListByTodoListID(id).get();
-        shoppingList.setTodoListName(toDoListName);
+        //if (shoppingListRepository.findShoppingListByTodoListID(id).isEmpty())
+            //throw new ProjectException("Shopping List " + id + " Not Found");
+        //ShoppingList shoppingList = shoppingListRepository.findShoppingListByTodoListID(id).get();
+        ShoppingList shoppingList = shoppingListRepository.findById(id).get();
         shoppingList.setMarketName(marketName);
         return save(shoppingList);
     }
 
-    public ShoppingList addProduct2List(Long shopID, Product prod) {
+    public ShoppingList addProduct2List(long shopID, Product prod) {
         ShoppingList shoppingList = getShoppingList(shopID);
         if (prod.getProductID() == null){
             Product savedProd = prodService.newProduct(prod);
@@ -63,18 +66,21 @@ public class ShoppingListService {
         return shoppingListRepository.save(shop);
     }
 
+    // TODO re-Develop function
     public void deleteShoppingLists(User user) {
+        List<ShoppingList> shoppingLists = shoppingListRepository.findShoppingListsByUser(user);
         if (countShoppingListsByUser(user) > 0)
-            for (ShoppingList shoppingList : getShoppingLists(user)) {
+            for (ShoppingList shoppingList : shoppingLists) {
                 if (!shoppingList.getProducts().isEmpty())
                     prodService.deleteProducts(shoppingList.getProducts());
-                deleteShoppingList(shoppingList.getTodoListID());
+                // TODO correct next line, shoppilng list is not heratige of TODO LIST anymore
+                //deleteShoppingList(shoppingList.getTodoListID());
             }
     }
 
     public void deleteShoppingList(Long productID) {
-        Optional<ShoppingList> shoppingList = shoppingListRepository.findById(productID);
+/*        Optional<ShoppingList> shoppingList = shoppingListRepository.findById(productID);
         if (shoppingList.isPresent())
             shoppingListRepository.delete(shoppingList.get());
-    }
+*/    }
 }
