@@ -74,13 +74,17 @@ public class SecurityConfig {
 
         http.cors(Customizer.withDefaults());  // CORS aktivieren
 
+        http.headers(headers -> headers.frameOptions().disable()); // for H2-console
         // set the session creation policy to stateless
         http.sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
         // set up authorization for different request matchers and user roles
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
 
+                .requestMatchers("/").permitAll()   //for web
+
                 .requestMatchers("/types").permitAll()
+                .requestMatchers("/api/users/register").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
 
@@ -115,8 +119,16 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // frontend URL
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://192.168.178.253:5173",
+                "http://msi:5173",
+
+                "http://localhost:8710",
+                "http://192.168.178.253:8710",
+                "http://msi:8710"));
+
+        config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // allow cookies/tokens
 
