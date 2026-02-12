@@ -6,6 +6,7 @@ target/
 
 /src/main/resources/static/**
 /src/data/**
+/src/data/*
 /src/data/
 
 ### STS ###
@@ -35,3 +36,5 @@ build/
 
 ### Project Files ###
 /src/Requests/http-client.private.env.json
+/src/data/testdb.mv.db
+/src/data/testdb.trace.db
