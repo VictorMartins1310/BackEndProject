@@ -17,8 +17,11 @@ public class TaskService {
     // Repositories
     private final TaskRepository taskRepository;
 
-    public Task newTask(Task task){
-        return taskRepository.save(task); }
+    public Task newTask(User user, Task task){
+        Task newTask = new Task(task.getTask(), task.getFrequency());
+        newTask.setUser(user);
+        return taskRepository.save(newTask);
+    }
 
     public Task getTask(Long id){
         if (taskRepository.getTaskByTodoID(id).isEmpty())

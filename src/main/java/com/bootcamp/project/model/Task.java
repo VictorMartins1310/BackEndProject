@@ -2,6 +2,7 @@ package com.bootcamp.project.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +11,12 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Task extends TodoItem {
     @NotNull
     private String task;
+    @NotNull
     private Frequency frequency;
 
     public void markTaskCompleted(){ super.setCompleted(true); }
-
 }

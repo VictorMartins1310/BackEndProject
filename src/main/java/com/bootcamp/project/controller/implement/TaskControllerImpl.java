@@ -36,8 +36,7 @@ public class TaskControllerImpl implements TaskController {
     public Task addTask(@RequestBody TaskDTO taskDTO){
         loggedUser = getAuthUser();
         Task newTask = taskMapper.toEntity(taskDTO);
-        newTask.setUser(getAuthUser());
-        return taskService.newTask(newTask);
+        return taskService.newTask(loggedUser, newTask);
     }
 
     @GetMapping(value = "/{taskLID}")

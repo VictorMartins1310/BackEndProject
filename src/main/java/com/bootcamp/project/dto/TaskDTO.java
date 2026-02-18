@@ -1,6 +1,8 @@
 package com.bootcamp.project.dto;
 
+import com.bootcamp.project.model.Frequency;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,5 +11,7 @@ import lombok.EqualsAndHashCode;
 public class TaskDTO extends ToDoListDTO{
     @Max(message = "Reached Maximum of (64) Characters", value = 64)
     private String task;
+    @NotNull
+    private Frequency frequency;
     private Boolean done = false;
 }
