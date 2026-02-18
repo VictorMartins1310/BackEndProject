@@ -2,14 +2,12 @@ package com.bootcamp.project.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Task extends TodoItem {

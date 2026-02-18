@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Data
 //@DynamicUpdate
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class ShoppingList extends TodoItem{
     private String marketName;

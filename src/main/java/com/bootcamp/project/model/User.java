@@ -2,6 +2,7 @@ package com.bootcamp.project.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,6 +15,7 @@ import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
 @Table(name = "Users")
 public class User {
