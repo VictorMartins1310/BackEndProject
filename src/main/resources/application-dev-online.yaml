@@ -1,11 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://db.nltqgtftdcbzdbgubmoa.supabase.co:6543/postgres
-
-    username: postgres
-    password: "Teste.2026!DB"
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,7 +9,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-
   web:
     cors:
       allowed-origins:

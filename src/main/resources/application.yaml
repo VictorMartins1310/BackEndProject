@@ -1,14 +1,11 @@
 spring:
   profiles:
-    active: dev
+    active: dev-online
   datasource:
-    url: jdbc:mysql://localhost:3306/Project
-    username: VictorMartins
-    password: badPassword
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: postgres
+    password: Pass8bad!word@26
   jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    properties:
+      hibernate.default_schema: app_todo
 server:
   port: 8710
