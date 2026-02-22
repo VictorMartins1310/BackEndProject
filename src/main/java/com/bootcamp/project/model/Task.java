@@ -8,8 +8,9 @@ import lombok.*;
 @Entity
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @AllArgsConstructor
+@Table(schema = "AppTodo")
 public class Task extends TodoItem {
     @NotNull
     private String task;

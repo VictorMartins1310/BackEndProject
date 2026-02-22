@@ -1,6 +1,7 @@
 package com.bootcamp.project.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ import static jakarta.persistence.FetchType.EAGER;
 @Entity
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
-@Table(name = "Users")
+//@RequiredArgsConstructor
+@AllArgsConstructor
+@Table(name = "AppUser", schema = "AppTodo")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

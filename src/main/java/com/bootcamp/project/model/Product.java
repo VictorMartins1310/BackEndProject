@@ -1,6 +1,7 @@
 package com.bootcamp.project.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@AllArgsConstructor
+@Table(schema = "AppTodo")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -14,6 +14,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(schema = "AppTodo")
 public abstract class TodoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

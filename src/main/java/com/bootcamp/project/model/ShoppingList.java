@@ -13,7 +13,9 @@ import java.util.List;
 @Data
 //@DynamicUpdate
 @NoArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@AllArgsConstructor
+@Table(schema = "AppTodo")
 public class ShoppingList extends TodoItem{
     private String marketName;
     @OneToMany
