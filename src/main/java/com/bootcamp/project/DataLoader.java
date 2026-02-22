@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@Profile({"dev", "prod"})
+@Profile({"dev"})
 public class DataLoader implements ApplicationListener<ApplicationReadyEvent> {
     private final UserService userService;
     private final ShoppingListService shoppingListService;
@@ -24,13 +24,7 @@ public class DataLoader implements ApplicationListener<ApplicationReadyEvent> {
             userService.addRole("ROLE_ADMIN");
             userService.addRole("ROLE_USER");
 
-            User[] users = {
-                    userService.newAdmin("Admin@mail.de", "badPassword"),
-                    userService.newUser("User@mail.de", "badPassword")
-            };
-            shoppingListService.newShoppingList(users[1], "ALDI");
-            shoppingListService.newShoppingList(users[1], "Penny");
-            shoppingListService.newShoppingList(users[1], "NETTO");
+            User users = userService.newUser("User@mail.de", "badPassword");
         }
     }
 }
