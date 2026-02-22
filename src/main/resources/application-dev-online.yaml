@@ -1,13 +1,19 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/victortodoapp
-    username: victormartins13
-    password: badPassword
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://db.nltqgtftdcbzdbgubmoa.supabase.co:6543/postgres
+
+    username: postgres
+    password: "Teste.2026!DB"
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+
   web:
     cors:
       allowed-origins:
