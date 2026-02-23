@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev-online
+    active: prod
   datasource:
     username: postgres
     password: Pass8bad!word@26
