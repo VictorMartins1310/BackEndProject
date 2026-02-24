@@ -4,7 +4,7 @@ import com.bootcamp.project.controller.TaskController;
 import com.bootcamp.project.dto.TaskDTO;
 import com.bootcamp.project.mappers.TaskMapper;
 import com.bootcamp.project.model.Task;
-import com.bootcamp.project.model.User;
+import com.bootcamp.project.model.AppUser;
 import com.bootcamp.project.service.TaskService;
 import com.bootcamp.project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +25,9 @@ public class TaskControllerImpl implements TaskController {
 
     private final TaskMapper taskMapper;
 
-    private User loggedUser;
+    private AppUser loggedUser;
 
-    private User getAuthUser() {
+    private AppUser getAuthUser() {
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 

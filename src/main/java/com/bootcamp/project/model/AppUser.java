@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -19,8 +18,8 @@ import static jakarta.persistence.FetchType.EAGER;
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @AllArgsConstructor
-@Table(name = "AppUser", schema = "AppTodo")
-public class User {
+@Table(schema = "AppTodo")
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userID;
@@ -36,7 +35,7 @@ public class User {
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
-    public User(String email, String password) {
+    public AppUser(String email, String password) {
         this.email = email;
         this.password = password;
     }

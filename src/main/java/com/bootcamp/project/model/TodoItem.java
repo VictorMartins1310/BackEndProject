@@ -27,5 +27,9 @@ public abstract class TodoItem {
 
     @NotNull
     @ManyToOne(optional = false)
-    private User user;
+    private AppUser user;
+
+    public String Type(){
+        return this.getClass().getSimpleName();
+    }
 }

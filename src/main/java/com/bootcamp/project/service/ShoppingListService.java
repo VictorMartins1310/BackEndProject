@@ -17,7 +17,7 @@ public class ShoppingListService {
     // Services
     private final ProductService prodService;
 
-    public Integer countShoppingListsByUser(User user){
+    public Integer countShoppingListsByUser(AppUser user){
         // Function maybe desnecessary
         return 1;
         //return shoppingListRepository.countShoppingListsByUser(user);
@@ -36,7 +36,7 @@ public class ShoppingListService {
         return shoppingListRepository.findShoppingListsByUser(user);
     }*/
 
-    public ShoppingList newShoppingList(User user, String marketName) {
+    public ShoppingList newShoppingList(AppUser user, String marketName) {
         ShoppingList shoppingList = new ShoppingList(user, marketName);
         return save(shoppingList);
     }
@@ -67,7 +67,7 @@ public class ShoppingListService {
     }
 
     // TODO re-Develop function
-    public void deleteShoppingLists(User user) {
+    public void deleteShoppingLists(AppUser user) {
         List<ShoppingList> shoppingLists = shoppingListRepository.findShoppingListsByUser(user);
         if (countShoppingListsByUser(user) > 0)
             for (ShoppingList shoppingList : shoppingLists) {
@@ -79,8 +79,13 @@ public class ShoppingListService {
     }
 
     public void deleteShoppingList(Long productID) {
-/*        Optional<ShoppingList> shoppingList = shoppingListRepository.findById(productID);
-        if (shoppingList.isPresent())
-            shoppingListRepository.delete(shoppingList.get());
-*/    }
+        Optional<ShoppingList> shoppingList = shoppingListRepository.findById(productID);
+        if (shoppingList.isPresent()) {
+            int nProducts = shoppingList.get().getProducts().size();
+            if (nProducts == 0)
+                shoppingListRepository.delete(shoppingList.get());
+            else
+                prodService.deleteProducts(shoppingList.get().getProducts());
+        }
+    }
 }

@@ -2,7 +2,6 @@ package com.bootcamp.project.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class ShoppingList extends TodoItem{
             total = total.add(prod.totalPrice());
         return total;
     }
-    public ShoppingList(User user, String marketName) {
+    public ShoppingList(AppUser user, String marketName) {
         this.marketName = marketName;
         super.setUser(user);
     }

@@ -5,7 +5,7 @@ import com.bootcamp.project.dto.ShoppingListDTO;
 import com.bootcamp.project.dto.ShoppingListProductsDTO;
 import com.bootcamp.project.mappers.TodoListMapper;
 import com.bootcamp.project.model.ShoppingList;
-import com.bootcamp.project.model.User;
+import com.bootcamp.project.model.AppUser;
 import com.bootcamp.project.service.ShoppingListService;
 import com.bootcamp.project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +31,14 @@ public class ShoppingListControllerImpl implements ShoppingListController{
     private final TodoListMapper shoppingLMapper;
 
     // private fields
-    private User loggedUser;
+    private AppUser loggedUser;
     private ShoppingList shoppingList;
 
     /**
      * This function get the Authenticated User
      * @return Authenticated User
      */
-    private User getAuthUser() {
+    private AppUser getAuthUser() {
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 

@@ -1,14 +1,12 @@
 package com.bootcamp.project.controller.implement;
 
-import com.bootcamp.project.model.ProductType;
+import com.bootcamp.project.model.AppUser;
 import com.bootcamp.project.model.Role;
-import com.bootcamp.project.model.User;
 import com.bootcamp.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,11 +35,11 @@ public class AdminController {
     public Role saveRole(@RequestBody String role) { return userService.addRole(role); }
 
     @GetMapping(value = admin + "/users")
-    public List<User> showAllUsers(){ return userService.showUsers(); }
+    public List<AppUser> showAllUsers(){ return userService.showUsers(); }
 
     @GetMapping(value = "/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User showDetails(@PathVariable(name = "id") UUID id){
+    public AppUser showDetails(@PathVariable(name = "id") UUID id){
         return userService.findByUserID(id);
     }
 

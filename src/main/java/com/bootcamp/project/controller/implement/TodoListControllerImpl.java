@@ -3,7 +3,7 @@ package com.bootcamp.project.controller.implement;
 import com.bootcamp.project.controller.TodoListController;
 import com.bootcamp.project.dto.ToDoListDTO;
 import com.bootcamp.project.mappers.TodoListMapper;
-import com.bootcamp.project.model.User;
+import com.bootcamp.project.model.AppUser;
 import com.bootcamp.project.service.TodoItemService;
 import com.bootcamp.project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class TodoListControllerImpl implements TodoListController {
     @ResponseStatus(HttpStatus.OK)
     //public List<ToDoListDTO> getTodoList(){
     public List<ToDoListDTO> getTodoList(){
-        User loggedUser = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        AppUser loggedUser = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return todoListMapper.toDto(toDoListService.getAllItems(loggedUser));
         //return toDoListService.getAllItems(loggedUser);
     }

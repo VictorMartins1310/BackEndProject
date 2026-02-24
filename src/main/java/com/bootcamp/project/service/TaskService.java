@@ -1,8 +1,8 @@
 package com.bootcamp.project.service;
 
 import com.bootcamp.project.exception.ProjectException;
+import com.bootcamp.project.model.AppUser;
 import com.bootcamp.project.model.Task;
-import com.bootcamp.project.model.User;
 import com.bootcamp.project.repos.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class TaskService {
     // Repositories
     private final TaskRepository taskRepository;
 
-    public Task newTask(User user, Task task){
+    public Task newTask(AppUser user, Task task){
         Task newTask = new Task(task.getTask(), task.getFrequency());
         newTask.setUser(user);
         return taskRepository.save(newTask);
@@ -29,7 +29,7 @@ public class TaskService {
         return taskRepository.getTaskByTodoID(id).get();
     }
 
-    public List<Task> getTasks(User user){
+    public List<Task> getTasks(AppUser user){
         return taskRepository.findByUser(user).stream().toList();
     }
 

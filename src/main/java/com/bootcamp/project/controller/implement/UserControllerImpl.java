@@ -4,7 +4,7 @@ import com.bootcamp.project.controller.UserController;
 import com.bootcamp.project.dto.UserDetailsDTO;
 import com.bootcamp.project.dto.LoginDTO;
 import com.bootcamp.project.mappers.UserDetailsMapper;
-import com.bootcamp.project.model.User;
+import com.bootcamp.project.model.AppUser;
 import com.bootcamp.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,13 +22,13 @@ public class UserControllerImpl implements UserController {
     private final UserDetailsMapper userDetailsMapper;
 
     // private fields
-    private User loggedUser;
+    private AppUser loggedUser;
 
     /**
      * This function get the Authenticated User
      * @return Authenticated User
      */
-    private User getAuthUser() {
+    private AppUser getAuthUser() {
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
@@ -45,19 +45,19 @@ public class UserControllerImpl implements UserController {
     }
     @PatchMapping(value = "/register/details")
     @ResponseStatus(HttpStatus.OK)
-    public UserDetailsDTO updateDetailsOnRegister(@RequestBody User userDetails) {
+    public UserDetailsDTO updateDetailsOnRegister(@RequestBody AppUser userDetails) {
         loggedUser = getAuthUser();
         return userDetailsMapper.toDto(userService.updateDetails(loggedUser, userDetails.getFirstName(), userDetails.getLastName(), userDetails.getBirthDate().toString()));
     }
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserDetailsDTO updateDetails(@RequestBody User userDetails) {
+    public UserDetailsDTO updateDetails(@RequestBody AppUser userDetails) {
         loggedUser = getAuthUser();
         return userDetailsMapper.toDto(userService.updateDetails(loggedUser, userDetails.getFirstName(), userDetails.getLastName(), userDetails.getBirthDate().toString()));
     }
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public User getMine(){
+    public AppUser getMine(){
         return getAuthUser();
     }
 }

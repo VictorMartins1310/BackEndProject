@@ -24,7 +24,7 @@ public class DataLoader implements ApplicationListener<ApplicationReadyEvent> {
             userService.addRole("ROLE_ADMIN");
             userService.addRole("ROLE_USER");
 
-            User users = userService.newUser("User@mail.de", "badPassword");
+            AppUser users = userService.newUser("User@mail.de", "badPassword");
         }
     }
 }

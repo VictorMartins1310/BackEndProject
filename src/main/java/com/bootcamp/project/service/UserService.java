@@ -1,8 +1,8 @@
 package com.bootcamp.project.service;
 
 import com.bootcamp.project.exception.ProjectException;
+import com.bootcamp.project.model.AppUser;
 import com.bootcamp.project.model.Role;
-import com.bootcamp.project.model.User;
 import com.bootcamp.project.repos.RoleRepository;
 import com.bootcamp.project.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     /** Show all Users a funtion for an Admin
      * @return List of Users without Password
      */
-    public List<User> showUsers(){  return userRepo.findAll(); }
+    public List<AppUser> showUsers(){  return userRepo.findAll(); }
     /** This Function add new Role or get the Role by Name
      * @param name String
      * @return new Role
@@ -48,12 +48,12 @@ public class UserService implements UserDetailsService {
             return roleRepository.findByRole(name).get();
     }
 
-    public User newAdmin(String email, String password){
-        User user = new User(email, password);
+    public AppUser newAdmin(String email, String password){
+        AppUser user = new AppUser(email, password);
         return save(user, "ROLE_ADMIN");
     }
 
-    public User save(User user, String role){
+    public AppUser save(AppUser user, String role){
         user.addRole(addRole(role));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
@@ -67,22 +67,22 @@ public class UserService implements UserDetailsService {
      * @param password String
      * @return User User
      */
-    public User newUser(String email, String password){
-        User user = new User(email, password);
+    public AppUser newUser(String email, String password){
+        AppUser user = new AppUser(email, password);
         return save(user, "ROLE_USER");
     }
     // UserDetails Section
-    public User findByUserID(UUID id){
+    public AppUser findByUserID(UUID id){
         if (userRepo.getUserByUserID(id).isEmpty())
             throw new ProjectException("User Not Found");
         return userRepo.getUserByUserID(id).get();
     }
-    public User getUserByEmail(String email){
+    public AppUser getUserByEmail(String email){
         if (userRepo.getUserByEmail(email).isEmpty())
             throw new ProjectException("User Not Found");
         return userRepo.getUserByEmail(email).get();
     }
-    public User updateDetails(User loggedUser, String firstName, String lastName, String birthDate) {
+    public AppUser updateDetails(AppUser loggedUser, String firstName, String lastName, String birthDate) {
         if (userRepo.getUserByUserID(loggedUser.getUserID()).isEmpty())
             throw new ProjectException("User Not Found");
         loggedUser.updateDetails(firstName, lastName, LocalDate.parse(birthDate));
@@ -97,7 +97,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Retrieve user with the given username
-        User user = getUserByEmail(email);
+        AppUser user = getUserByEmail(email);
         // Check if user exists
         if (user == null) {
             throw new UsernameNotFoundException("User not found in the database");
@@ -113,7 +113,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUserByID(UUID userID){
-        User user = findByUserID(userID);
+        AppUser user = findByUserID(userID);
         if (user == null)
             throw new ProjectException("User not Found");
         //taskListService.deleteTasksLists(user);
