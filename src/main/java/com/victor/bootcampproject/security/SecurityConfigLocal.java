@@ -34,7 +34,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+@Profile("dev-MySQL")
+public class SecurityConfigLocal {
     // Instance of the AuthenticationManagerBuilder
     private final AuthenticationManagerBuilder authManagerBuilder;
 
