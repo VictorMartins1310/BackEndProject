@@ -69,6 +69,12 @@ public class UserService implements UserDetailsService {
      */
     public AppUser newUser(String email, String password){
         AppUser user = new AppUser(email, password);
+        user.setUserID(UUID.randomUUID());
+        return save(user, "ROLE_USER");
+    }
+    public AppUser newUser(UUID uuid, String email, String password){
+        AppUser user = new AppUser(email, password);
+        user.setUserID(uuid);
         return save(user, "ROLE_USER");
     }
     // UserDetails Section

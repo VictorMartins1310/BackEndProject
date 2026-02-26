@@ -21,7 +21,6 @@ import static jakarta.persistence.FetchType.EAGER;
 @Table(schema = "AppTodo")
 public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userID;
     @Column(unique=true) // for dont getting doubled email adresses
     private String email;
@@ -43,7 +42,7 @@ public class AppUser {
         roles.add(role);
     }
 
-    public void updateDetails( String firstName, String lastName, LocalDate birthDate) {
+    public void updateDetails(String firstName, String lastName, LocalDate birthDate) {
         setFirstName(firstName);
         setLastName(lastName);
         setBirthDate(birthDate);

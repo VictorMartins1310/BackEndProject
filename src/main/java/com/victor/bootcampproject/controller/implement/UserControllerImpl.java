@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 
 /** A controller for User, here a User can Register and Update his Information */
 @RequiredArgsConstructor
@@ -37,10 +35,9 @@ public class UserControllerImpl implements UserController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDetailsDTO newUser(@RequestBody LoginDTO loginData){
-        return userDetailsMapper.toDto(userService.newUser(loginData.getEmail(), loginData.getPassword()));
-        //UUID uuid = UUID.randomUUID();
-        //return userDetailsMapper.toDto(userService.newUser(uuid));
+        return userDetailsMapper.toDto(userService.newUser(loginData.getUserID(), loginData.getEmail(), loginData.getPassword()));
     }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public UserDetailsDTO showDetails(){
