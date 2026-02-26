@@ -9,6 +9,7 @@ import com.victor.bootcampproject.service.TaskService;
 import com.victor.bootcampproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,14 +28,15 @@ public class TaskControllerImpl implements TaskController {
 
     private AppUser loggedUser;
 
-    private AppUser getAuthUser() {
+    private AppUser getAuthUser(AppUser optionalUser) {
+        if (optionalUser != null) return optionalUser;
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task addTask(@RequestBody TaskDTO taskDTO){
-        loggedUser = getAuthUser();
+    public Task addTask(@AuthenticationPrincipal AppUser optionalUser, @RequestBody TaskDTO taskDTO){
+        loggedUser = getAuthUser(optionalUser);
         Task newTask = taskMapper.toEntity(taskDTO);
         return taskService.newTask(loggedUser, newTask);
     }

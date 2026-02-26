@@ -10,6 +10,7 @@ import com.victor.bootcampproject.service.ShoppingListService;
 import com.victor.bootcampproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,14 +39,16 @@ public class ShoppingListControllerImpl implements ShoppingListController{
      * This function get the Authenticated User
      * @return Authenticated User
      */
-    private AppUser getAuthUser() {
+    private AppUser getAuthUser(AppUser optionalUser) {
+        if (optionalUser != null) return optionalUser;
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ShoppingListDTO newShoppingList(@RequestBody ShoppingListDTO newShoppingData){
-        loggedUser = getAuthUser();
+    public ShoppingListDTO newShoppingList(@AuthenticationPrincipal AppUser optionalUser, @RequestBody ShoppingListDTO newShoppingData){
+        loggedUser = getAuthUser(optionalUser);
         shoppingList = shoppingLService.newShoppingList(loggedUser, newShoppingData.getMarketName());
         return shoppingLMapper.toDto(shoppingList);
     }
@@ -56,9 +59,9 @@ public class ShoppingListControllerImpl implements ShoppingListController{
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ShoppingListDTO> showShoppingLists(){
+    public List<ShoppingListDTO> showShoppingLists(@AuthenticationPrincipal AppUser optionalUser){
         // TODO Re Develop no user in shoppinglist
-        loggedUser = getAuthUser();
+        loggedUser = getAuthUser(optionalUser);
         List<ShoppingList> emptyList = new ArrayList<>();
         return shoppingLMapper.toDTO(emptyList);
         //return shoppingLMapper.toShoppingListDtos(shoppingLService.getShoppingLists(loggedUser));
