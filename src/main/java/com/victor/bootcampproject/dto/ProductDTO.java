@@ -1,0 +1,19 @@
+package com.victor.bootcampproject.dto;
+
+import com.victor.bootcampproject.model.ProductType;
+import jakarta.validation.constraints.*;
+import lombok.Data;
+
+import java.math.BigDecimal;
+@Data
+public class ProductDTO {
+    private Long productID;
+    @Max(message = "Reached Maximum of (64) Characters", value = 64)
+    private String name;
+    @Max(message = "Reached Maximum of (64) Characters", value = 64)
+    private String brand;
+    private BigDecimal price;
+    private int qty;
+    private ProductType type;
+    private Boolean bought = false;
+}

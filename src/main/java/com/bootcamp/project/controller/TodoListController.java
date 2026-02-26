@@ -1,6 +1,0 @@
-package com.bootcamp.project.controller;
-
-
-public interface TodoListController {
-    Object getTodoList();
-}
