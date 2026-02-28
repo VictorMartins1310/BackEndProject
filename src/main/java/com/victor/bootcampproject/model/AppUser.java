@@ -35,8 +35,9 @@ public class AppUser {
     private Collection<Role> roles = new ArrayList<>();
 
     public AppUser(String email, String password) {
-        this.email = email;
-        this.password = password;
+        setUserID(UUID.randomUUID());
+        setEmail(email.toLowerCase());
+        setPassword(password);
     }
     public void addRole(Role role){
         roles.add(role);
