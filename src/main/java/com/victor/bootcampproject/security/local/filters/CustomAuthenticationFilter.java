@@ -1,4 +1,4 @@
-package com.victor.bootcampproject.security.filters;
+package com.victor.bootcampproject.security.local.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -55,7 +55,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         try {
             Map<String, String> credentials = new ObjectMapper().readValue(request.getInputStream(), Map.class);
 
-            String email = credentials.get("email");
+            String email = credentials.get("email").toLowerCase();
             String password = credentials.get("password");
 
             log.info("Username is: {}", email);

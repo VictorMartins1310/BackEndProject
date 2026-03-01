@@ -6,31 +6,23 @@ import com.victor.bootcampproject.model.Role;
 import com.victor.bootcampproject.repos.RoleRepository;
 import com.victor.bootcampproject.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
 
-@Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
-    // Repositories Section
-    private final UserRepository userRepo;
-    private final RoleRepository roleRepository;
+public abstract class UserService{
+    protected final UserRepository userRepo;
+    protected final RoleRepository roleRepository;
 
     // Service Section
-    private final ShoppingListService shoppingListService;
+    protected final ShoppingListService shoppingListService;
 
-    /**  Injects a bean of type PasswordEncoder into this class.
-     * The bean is used for encoding passwords before storing them.
-     */
-    private final PasswordEncoder passwordEncoder;
-    // Method Section
+    protected final PasswordEncoder passwordEncoder;
+
+
     public long qtyUsers(){ return userRepo.count(); }
 
     /** Show all Users a funtion for an Admin
@@ -77,12 +69,12 @@ public class UserService implements UserDetailsService {
         user.setUserID(uuid);
         return save(user, "ROLE_USER");
     }
-    // UserDetails Section
-    public AppUser findByUserID(UUID id){
+    public AppUser getUserByUserID(UUID id){
         if (userRepo.getUserByUserID(id).isEmpty())
             throw new ProjectException("User Not Found");
         return userRepo.getUserByUserID(id).get();
     }
+
     public AppUser getUserByEmail(String email){
         if (userRepo.getUserByEmail(email).isEmpty())
             throw new ProjectException("User Not Found");
@@ -100,30 +92,14 @@ public class UserService implements UserDetailsService {
      * @return the UserDetails object that matches the given username
      * @throws UsernameNotFoundException if the user with the given username is not found
      */
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Retrieve user with the given username
-        AppUser user = getUserByEmail(email);
-        // Check if user exists
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found in the database");
-        } else {
-            // Create a collection of SimpleGrantedAuthority objects from the user's roles
-            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            user.getRoles().forEach(role -> {
-                authorities.add(new SimpleGrantedAuthority(role.getRole()));
-            });
-            // Return the user details, including the username, password, and authorities
-            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
-        }
-    }
 
     public void deleteUserByID(UUID userID){
-        AppUser user = findByUserID(userID);
+        AppUser user = getUserByUserID(userID);
         if (user == null)
             throw new ProjectException("User not Found");
         //taskListService.deleteTasksLists(user);
         shoppingListService.deleteShoppingLists(user);
         userRepo.delete(user);
     }
+
 }

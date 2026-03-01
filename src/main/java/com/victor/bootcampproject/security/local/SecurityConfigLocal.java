@@ -1,16 +1,15 @@
-package com.victor.bootcampproject.security;
+package com.victor.bootcampproject.security.local;
 
-import java.util.List;
-import com.victor.bootcampproject.security.filters.CustomAuthenticationFilter;
-import com.victor.bootcampproject.security.filters.CustomAuthorizationFilter;
-import lombok.RequiredArgsConstructor;
+import com.victor.bootcampproject.security.SecurityConfig;
+import com.victor.bootcampproject.security.local.filters.CustomAuthenticationFilter;
+import com.victor.bootcampproject.security.local.filters.CustomAuthorizationFilterLocal;
+import com.victor.bootcampproject.service.UserServiceLocal;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -18,26 +17,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import org.springframework.context.annotation.Profile;
-
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-    /**
-     * This is the main configuration class for security in the application. It enables web security,
-     * sets up the password encoder, and sets up the security filter chain.
-     */
+/**
+ * This is the main configuration class for security in the application. It enables web security,
+ * sets up the password encoder, and sets up the security filter chain.
+ */
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @Profile("dev-MySQL")
-public class SecurityConfigLocal {
-    // Instance of the AuthenticationManagerBuilder
-    private final AuthenticationManagerBuilder authManagerBuilder;
+public class SecurityConfigLocal extends SecurityConfig {
+    private final UserServiceLocal userService;
+
+    public SecurityConfigLocal(AuthenticationManagerBuilder authManagerBuilder, UserServiceLocal userService) {
+        super(authManagerBuilder);
+        this.userService = userService;
+    }
 
     /**  Bean definition for PasswordEncoder
      *
@@ -45,18 +44,7 @@ public class SecurityConfigLocal {
      */
     @Bean
     public PasswordEncoder encoder() {
-            return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        }
-    /**
-         * Bean definition for AuthenticationManager
-         *
-         * @param authenticationConfiguration the instance of AuthenticationConfiguration
-         * @return an instance of the AuthenticationManager
-         * @throws Exception if there is an issue getting the instance of the AuthenticationManager
-         */
-    @Bean
-    public AuthenticationManager authenticationManager(@NotNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
     /**  Bean definition for SecurityFilterChain
      *
@@ -89,7 +77,7 @@ public class SecurityConfigLocal {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
 
-
+                .requestMatchers("/api/login").permitAll()
                 .requestMatchers("/api/login/**").permitAll()
                 .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
 
@@ -110,31 +98,9 @@ public class SecurityConfigLocal {
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilterLocal(userService), UsernamePasswordAuthenticationFilter.class);
 
         // Build the security filter chain to be returned.
         return http.build();
-    }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://localhost:4173",
-                "http://192.168.178.253:5173",
-                "http://msi:5173",
-
-                "http://localhost:8710",
-                "http://192.168.178.253:8710",
-                "http://msi:8710"));
-
-        config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // allow cookies/tokens
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
-    return new CorsFilter(source);
     }
 }
