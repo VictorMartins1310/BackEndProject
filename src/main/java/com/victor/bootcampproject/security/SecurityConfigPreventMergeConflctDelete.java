@@ -14,7 +14,7 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.List;
 
 @RequiredArgsConstructor
-public abstract class SecurityConfig {
+public abstract class SecurityConfigPreventMergeConflctDelete {
     // Instance of the AuthenticationManagerBuilder
     protected final AuthenticationManagerBuilder authManagerBuilder;
 

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @RequiredArgsConstructor
-public abstract class UserService{
+public abstract class UserServiceConflictPR {
     protected final UserRepository userRepo;
     protected final RoleRepository roleRepository;
 
