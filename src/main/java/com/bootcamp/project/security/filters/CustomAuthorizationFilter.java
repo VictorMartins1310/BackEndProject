@@ -32,7 +32,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  * authorization of a user to access the API endpoints.
  */
 @Slf4j
-public class CustomAuthorizationFilter extends OncePerRequestFilter {
+public abstract class CustomAuthorizationFilter extends OncePerRequestFilter {
     /**
      * The method doFilterInternal will handle the authorization of a user to access the API endpoints.
      *

@@ -18,7 +18,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public abstract class UserService implements UserDetailsService {
     // Repositories Section
     private final UserRepository userRepo;
     private final RoleRepository roleRepository;
