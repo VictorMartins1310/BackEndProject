@@ -19,8 +19,4 @@ spring:
         - "http://localhost:5173"
         - "http://192.168.178.253:8710"
         - "http://192.168.178.253:5173"
-        - "http://msi:8710"
         - "http://msi:5173"
-      allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
-      allowed-headers: "*"
-      allow-credentials: true

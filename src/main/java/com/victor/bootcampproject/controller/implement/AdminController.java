@@ -40,7 +40,7 @@ public class AdminController {
     @GetMapping(value = "/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AppUser showDetails(@PathVariable(name = "id") UUID id){
-        return userService.findByUserID(id);
+        return userService.getUserByUserID(id);
     }
 
     @DeleteMapping(value = admin + "/users/{id}")

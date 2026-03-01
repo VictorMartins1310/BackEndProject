@@ -1,7 +1,6 @@
 package com.victor.bootcampproject.mappers;
 
 
-import com.victor.bootcampproject.*;
 import com.victor.bootcampproject.dto.ShoppingListDTO;
 import com.victor.bootcampproject.dto.ShoppingListProductsDTO;
 import com.victor.bootcampproject.dto.ToDoListDTO;

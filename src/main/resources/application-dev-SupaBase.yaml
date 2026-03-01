@@ -1,13 +1,16 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db.nltqgtftdcbzdbgubmoa.supabase.co:6543/postgres
+    url: jdbc:postgresql://db.nltqgtftdcbzdbgubmoa.supabase.co:5432/postgres
     driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: Pass8bad!word@26
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: app_todo
     show-sql: true
   web:
     cors:
@@ -16,8 +19,14 @@ spring:
         - "http://localhost:5173"
         - "http://192.168.178.253:8710"
         - "http://192.168.178.253:5173"
-        - "http://msi:8710"
         - "http://msi:5173"
+        - "http://msi:8710"
       allowed-methods: "GET,POST, PATCH, PUT,DELETE,OPTIONS"
       allowed-headers: "*"
       allow-credentials: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security.oauth2: DEBUG

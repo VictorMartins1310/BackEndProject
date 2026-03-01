@@ -1,6 +1,5 @@
 package com.victor.bootcampproject.dto;
 
-import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.util.Date;
 

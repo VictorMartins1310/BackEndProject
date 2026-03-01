@@ -1,12 +1,7 @@
 package com.victor.bootcampproject.controller;
 
-import com.victor.bootcampproject.model.Frequency;
-import com.victor.bootcampproject.model.ProductType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Controller
 public class WebControl {

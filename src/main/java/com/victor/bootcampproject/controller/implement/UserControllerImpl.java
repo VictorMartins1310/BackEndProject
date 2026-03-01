@@ -35,7 +35,7 @@ public class UserControllerImpl implements UserController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDetailsDTO newUser(@RequestBody LoginDTO loginData){
-        return userDetailsMapper.toDto(userService.newUser(loginData.getUserID(), loginData.getEmail(), loginData.getPassword()));
+        return userDetailsMapper.toDto(userService.newUser(loginData.getEmail(), loginData.getPassword()));
     }
 
     @GetMapping

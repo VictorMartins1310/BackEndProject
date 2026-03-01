@@ -1,11 +1,14 @@
 spring:
   profiles:
-    active: prod
-  datasource:
-    username: postgres
-    password: Pass8bad!word@26
+    active: dev-MySQL
   jpa:
-    properties:
-      hibernate.default_schema: app_todo
+  web:
+    cors:
+      allowed-origins:
+        - "http://msi:8710"
+      allowed-methods: "GET,POST, PATCH, PUT,DELETE,OPTIONS"
+      allowed-headers: "*"
+      allow-credentials: true
+
 server:
   port: 8710
