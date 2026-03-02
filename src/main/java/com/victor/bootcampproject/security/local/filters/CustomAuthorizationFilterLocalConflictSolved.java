@@ -5,25 +5,22 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.security.filters.CustomAuthorizationFilter;
-import com.victor.bootcampproject.service.UserServiceLocal;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -35,27 +32,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  * authorization of a user to access the API endpoints.
  */
 @Slf4j
-@Profile({"dev-MySQL"})
-public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
-    private final UserServiceLocal userService;
-
-
-    public CustomAuthorizationFilterLocal(UserServiceLocal userService) {
-        this.userService = userService;
-    }
-
-
-    public String getDecodedToken(@NotNull String token){
-        String alg = "HS256DEFAULT";
-        if (token.split("\\.").length == 3) {
-            String headerJson = new String(Base64.getUrlDecoder().decode(token.split("\\.")[0]));
-            JsonObject header = Json.createReader(new StringReader(headerJson)).readObject();
-            alg = header.getString("alg");
-        }
-
-        return alg;
-    }
-
+public abstract class CustomAuthorizationFilterLocalConflictSolved extends OncePerRequestFilter {
     /**
      * The method doFilterInternal will handle the authorization of a user to access the API endpoints.
      *
@@ -80,20 +57,7 @@ public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
                 try {
                     // If the authorization header is present, get the token
                     String token = authorizationHeader.substring("Bearer ".length());
-                    String algorithmType = getDecodedToken(token);
-
-                    Algorithm algorithm;
-
-                    switch (algorithmType) {
-                        case "HS256", "RS256":
-                            algorithm = Algorithm.HMAC256("secret".getBytes());
-                                        break;
-                        case "HS384":
-                            algorithm = Algorithm.HMAC384("secret".getBytes()); break;
-                        default:
-                            algorithm = Algorithm.HMAC512("secret".getBytes());
-                    }
-
+                    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
@@ -103,11 +67,8 @@ public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
                         authorities.add(new SimpleGrantedAuthority(role));
                     });
                     // Create a new authentication token with the user's details and authorities and set it in the Security Context
-
-                    AppUser user = userService.getUserByEmail(username);
-
                     UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(user, null, authorities);
+                            new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     // Pass the request to the next filter in the chain
                     filterChain.doFilter(request, response);

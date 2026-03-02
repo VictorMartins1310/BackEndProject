@@ -1,13 +1,10 @@
 package com.victor.bootcampproject.security.local;
 
-import com.victor.bootcampproject.security.SecurityConfig;
 import com.victor.bootcampproject.security.local.filters.CustomAuthenticationFilter;
-import com.victor.bootcampproject.security.local.filters.CustomAuthorizationFilterLocal;
-import com.victor.bootcampproject.service.UserServiceLocal;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,14 +26,10 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
  */
 @Configuration
 @EnableWebSecurity
-@Profile("dev-MySQL")
-public class SecurityConfigLocal extends SecurityConfig {
-    private final UserServiceLocal userService;
-
-    public SecurityConfigLocal(AuthenticationManagerBuilder authManagerBuilder, UserServiceLocal userService) {
-        super(authManagerBuilder);
-        this.userService = userService;
-    }
+@RequiredArgsConstructor
+public abstract class SecurityConfigLocalConflictSolved {
+    // Instance of the AuthenticationManagerBuilder
+    private final AuthenticationManagerBuilder authManagerBuilder;
 
     /**  Bean definition for PasswordEncoder
      *
@@ -44,7 +37,18 @@ public class SecurityConfigLocal extends SecurityConfig {
      */
     @Bean
     public PasswordEncoder encoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+            return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        }
+    /**
+         * Bean definition for AuthenticationManager
+         *
+         * @param authenticationConfiguration the instance of AuthenticationConfiguration
+         * @return an instance of the AuthenticationManager
+         * @throws Exception if there is an issue getting the instance of the AuthenticationManager
+         */
+    @Bean
+    public AuthenticationManager authenticationManager(@NotNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
     /**  Bean definition for SecurityFilterChain
      *
@@ -77,7 +81,7 @@ public class SecurityConfigLocal extends SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
 
-                .requestMatchers("/api/login").permitAll()
+
                 .requestMatchers("/api/login/**").permitAll()
                 .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
 
@@ -98,7 +102,7 @@ public class SecurityConfigLocal extends SecurityConfig {
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.
-        http.addFilterBefore(new CustomAuthorizationFilterLocal(userService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         // Build the security filter chain to be returned.
         return http.build();

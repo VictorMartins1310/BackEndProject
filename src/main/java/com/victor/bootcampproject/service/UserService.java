@@ -6,7 +6,6 @@ import com.victor.bootcampproject.model.Role;
 import com.victor.bootcampproject.repos.RoleRepository;
 import com.victor.bootcampproject.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -20,9 +19,11 @@ public abstract class UserService{
     // Service Section
     protected final ShoppingListService shoppingListService;
 
-    protected final PasswordEncoder passwordEncoder;
-
-
+    /**  Injects a bean of type PasswordEncoder into this class.
+     * The bean is used for encoding passwords before storing them.
+     */
+    private final PasswordEncoder passwordEncoder;
+    // Method Section
     public long qtyUsers(){ return userRepo.count(); }
 
     /** Show all Users a funtion for an Admin
@@ -86,12 +87,6 @@ public abstract class UserService{
         loggedUser.updateDetails(firstName, lastName, LocalDate.parse(birthDate));
         return userRepo.save(loggedUser);
     }
-    /** Loads the user by its username, in this case the email adress
-     *
-     * @param email the username to search for
-     * @return the UserDetails object that matches the given username
-     * @throws UsernameNotFoundException if the user with the given username is not found
-     */
 
     public void deleteUserByID(UUID userID){
         AppUser user = getUserByUserID(userID);
@@ -101,5 +96,4 @@ public abstract class UserService{
         shoppingListService.deleteShoppingLists(user);
         userRepo.delete(user);
     }
-
 }
