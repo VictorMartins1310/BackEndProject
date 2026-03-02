@@ -3,10 +3,9 @@ package com.victor.bootcampproject.security;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -20,7 +19,6 @@ public abstract class SecurityConfig {
 
     /**
      * Bean definition for AuthenticationManager
-     *
      * @param authenticationConfiguration the instance of AuthenticationConfiguration
      * @return an instance of the AuthenticationManager
      * @throws Exception if there is an issue getting the instance of the AuthenticationManager

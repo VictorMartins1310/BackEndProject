@@ -1,11 +1,12 @@
-package com.victor.bootcampproject.security.supabase;
+package com.victor.bootcampproject.security;
 
-import com.victor.bootcampproject.security.SecurityConfig;
-import com.victor.bootcampproject.security.supabase.filters.CustomAuthorizationFilterSupaBase;
-import com.victor.bootcampproject.service.UserServiceSupaBase;
-import org.jetbrains.annotations.NotNull;
+import com.victor.bootcampproject.security.filters.CustomAuthenticationFilter;
+import com.victor.bootcampproject.security.filters.CustomAuthorizationFilterLocal;
+import com.victor.bootcampproject.service.UserServiceLocal;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,29 +19,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import org.springframework.context.annotation.Profile;
-
 /**
  * This is the main configuration class for security in the application. It enables web security,
  * sets up the password encoder, and sets up the security filter chain.
  */
 @Configuration
 @EnableWebSecurity
-@Profile("dev-SupaBase")
-public class SecurityConfigSupabase extends SecurityConfig {
+@Profile("dev-MySQL")
+public class SecurityConfigLocal extends SecurityConfig {
+    private final UserServiceLocal userService;
 
-    private final UserServiceSupaBase userService;
-
-    public SecurityConfigSupabase(AuthenticationManagerBuilder authManagerBuilder, UserServiceSupaBase userService) {
+    public SecurityConfigLocal(AuthenticationManagerBuilder authManagerBuilder, UserServiceLocal userService) {
         super(authManagerBuilder);
         this.userService = userService;
     }
-
-    @Bean
-    public CustomAuthorizationFilterSupaBase customAuthorizationFilter(UserServiceSupaBase userService) {
-        return new CustomAuthorizationFilterSupaBase(userService);
-    }
-
 
     /**  Bean definition for PasswordEncoder
      *
@@ -50,7 +42,6 @@ public class SecurityConfigSupabase extends SecurityConfig {
     public PasswordEncoder encoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
     /**  Bean definition for SecurityFilterChain
      *
      * @param http the instance of HttpSecurity
@@ -58,7 +49,11 @@ public class SecurityConfigSupabase extends SecurityConfig {
      * @throws Exception if there is an issue building the SecurityFilterChain
      */
     @Bean
-    protected SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChain(@NonNull HttpSecurity http) throws Exception {
+        // CustomAuthenticationFilter instance created
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
+        // set the URL that the filter should process
+        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         // disable CSRF protection
         http.csrf(csrf -> csrf.disable());
 
@@ -71,35 +66,35 @@ public class SecurityConfigSupabase extends SecurityConfig {
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
 
-                .requestMatchers("/api/login").permitAll()
+                .requestMatchers("/").permitAll()   //for web
+
+                .requestMatchers("/types").permitAll()
                 .requestMatchers("/api/users/register").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/", "/index.html", "/favicon.ico", "/assets/**").permitAll()
+                .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
 
-
-                .requestMatchers(GET,"/api/types").authenticated()
-                .requestMatchers(GET, "/api/frequencies").permitAll()
+                .requestMatchers("/api/login").permitAll()
                 .requestMatchers("/api/login/**").permitAll()
-                .requestMatchers("/api/admin/users").authenticated()
+                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
+
                 .requestMatchers(GET, "/api/users/me").permitAll()
                 .requestMatchers(POST, "/api/users").permitAll()
                 .requestMatchers(PATCH, "/api/users").permitAll()
 
-                .requestMatchers(GET,"/api/todolist/test").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(GET, "/api/todolist").authenticated()
+                .requestMatchers(GET,
+                        "/api/users", "/api/todolist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, "/api/users").hasAnyAuthority("ROLE_USER")
 
-                .requestMatchers(PATCH, "/api/users").authenticated()
-
-                .requestMatchers(POST, "/api/todolist/**").authenticated()
-                .requestMatchers(PATCH, "/api/todolist/**").authenticated()
-                .requestMatchers(DELETE, "/api/todolist/**").authenticated()
+                .requestMatchers(POST, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(DELETE, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
 
 
                 .anyRequest().authenticated());
+        // add the custom authentication filter to the http security object
+        http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.
-
-        http.addFilterBefore(customAuthorizationFilter(userService), UsernamePasswordAuthenticationFilter.class);
-
+        http.addFilterBefore(new CustomAuthorizationFilterLocal(userService), UsernamePasswordAuthenticationFilter.class);
 
         // Build the security filter chain to be returned.
         return http.build();

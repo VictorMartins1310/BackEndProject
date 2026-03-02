@@ -1,38 +1,64 @@
-package com.victor.bootcampproject.security.local.filters;
+package com.victor.bootcampproject.security.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.victor.bootcampproject.model.AppUser;
+import com.victor.bootcampproject.service.UserServiceLocal;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.StringReader;
+import java.util.*;
 
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * CustomAuthorizationFilter is an implementation of OncePerRequestFilter to handle
  * authorization of a user to access the API endpoints.
  */
 @Slf4j
-public abstract class CustomAuthorizationFilterLocalConflictSolved extends OncePerRequestFilter {
+@Profile({"dev-MySQL"})
+public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
+    private final UserServiceLocal userService;
+
+    public CustomAuthorizationFilterLocal(UserServiceLocal userService) {
+        this.userService = userService;
+    }
+
+    public Algorithm getAlgorithm(@NonNull String token){
+        String algorithmType = "HS256DEFAULT";
+        if (token.split("\\.").length == 3) {
+            String headerJson = new String(Base64.getUrlDecoder().decode(token.split("\\.")[0]));
+            JsonObject header = Json.createReader(new StringReader(headerJson)).readObject();
+            algorithmType = header.getString("alg");
+        }
+        switch (algorithmType) {
+            case "HS256", "RS256":
+                return Algorithm.HMAC256("secret".getBytes()); //MySQL
+            case "HS384":
+                return Algorithm.HMAC384("secret".getBytes()); //Supabase?
+            default:
+                return Algorithm.HMAC512("secret".getBytes());
+        }
+    }
+
     /**
      * The method doFilterInternal will handle the authorization of a user to access the API endpoints.
      *
@@ -44,9 +70,9 @@ public abstract class CustomAuthorizationFilterLocalConflictSolved extends OnceP
      */
     @Override
     protected void doFilterInternal(
-            @NotNull HttpServletRequest request,
-            @NotNull HttpServletResponse response,
-            @NotNull FilterChain filterChain) throws ServletException, IOException {
+            @NonNull HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         // If the request is for the API Login endpoint, pass the request to the next filter in the chain
         if (request.getServletPath().equals("/api/login")) {
             filterChain.doFilter(request, response);
@@ -57,7 +83,7 @@ public abstract class CustomAuthorizationFilterLocalConflictSolved extends OnceP
                 try {
                     // If the authorization header is present, get the token
                     String token = authorizationHeader.substring("Bearer ".length());
-                    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                    Algorithm algorithm = getAlgorithm(token);
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
@@ -67,8 +93,11 @@ public abstract class CustomAuthorizationFilterLocalConflictSolved extends OnceP
                         authorities.add(new SimpleGrantedAuthority(role));
                     });
                     // Create a new authentication token with the user's details and authorities and set it in the Security Context
+
+                    AppUser user = userService.getUserByEmail(username);
+
                     UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(username, null, authorities);
+                            new UsernamePasswordAuthenticationToken(user, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     // Pass the request to the next filter in the chain
                     filterChain.doFilter(request, response);

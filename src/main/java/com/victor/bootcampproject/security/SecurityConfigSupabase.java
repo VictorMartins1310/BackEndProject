@@ -1,7 +1,7 @@
-package com.victor.bootcampproject.security.local;
+package com.victor.bootcampproject.security;
 
-import com.victor.bootcampproject.security.local.filters.CustomAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import com.victor.bootcampproject.security.filters.CustomAuthorizationFilterSupaBase;
+import com.victor.bootcampproject.service.UserServiceSupaBase;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.PATCH;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+import org.springframework.context.annotation.Profile;
 
 /**
  * This is the main configuration class for security in the application. It enables web security,
@@ -26,10 +25,21 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
  */
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-public abstract class SecurityConfigLocalConflictSolved {
-    // Instance of the AuthenticationManagerBuilder
-    private final AuthenticationManagerBuilder authManagerBuilder;
+@Profile("dev-SupaBase")
+public class SecurityConfigSupabase extends SecurityConfig {
+
+    private final UserServiceSupaBase userService;
+
+    public SecurityConfigSupabase(AuthenticationManagerBuilder authManagerBuilder, UserServiceSupaBase userService) {
+        super(authManagerBuilder);
+        this.userService = userService;
+    }
+
+    @Bean
+    public CustomAuthorizationFilterSupaBase customAuthorizationFilter(UserServiceSupaBase userService) {
+        return new CustomAuthorizationFilterSupaBase(userService);
+    }
+
 
     /**  Bean definition for PasswordEncoder
      *
@@ -37,19 +47,9 @@ public abstract class SecurityConfigLocalConflictSolved {
      */
     @Bean
     public PasswordEncoder encoder() {
-            return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        }
-    /**
-         * Bean definition for AuthenticationManager
-         *
-         * @param authenticationConfiguration the instance of AuthenticationConfiguration
-         * @return an instance of the AuthenticationManager
-         * @throws Exception if there is an issue getting the instance of the AuthenticationManager
-         */
-    @Bean
-    public AuthenticationManager authenticationManager(@NotNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
     /**  Bean definition for SecurityFilterChain
      *
      * @param http the instance of HttpSecurity
@@ -58,10 +58,6 @@ public abstract class SecurityConfigLocalConflictSolved {
      */
     @Bean
     protected SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
-        // CustomAuthenticationFilter instance created
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
-        // set the URL that the filter should process
-        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         // disable CSRF protection
         http.csrf(csrf -> csrf.disable());
 
@@ -74,35 +70,35 @@ public abstract class SecurityConfigLocalConflictSolved {
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
 
-                .requestMatchers("/").permitAll()   //for web
-
-                .requestMatchers("/types").permitAll()
+                .requestMatchers("/api/login").permitAll()
                 .requestMatchers("/api/users/register").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
+                .requestMatchers("/", "/index.html", "/favicon.ico", "/assets/**").permitAll()
 
 
+                .requestMatchers(GET,"/api/types").authenticated()
+                .requestMatchers(GET, "/api/frequencies").permitAll()
                 .requestMatchers("/api/login/**").permitAll()
-                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
-
+                .requestMatchers("/api/admin/users").authenticated()
                 .requestMatchers(GET, "/api/users/me").permitAll()
                 .requestMatchers(POST, "/api/users").permitAll()
                 .requestMatchers(PATCH, "/api/users").permitAll()
 
-                .requestMatchers(GET,
-                        "/api/users", "/api/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, "/api/users").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(GET,"/api/todolist/test").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(GET, "/api/todolist").authenticated()
 
-                .requestMatchers(POST, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(DELETE, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, "/api/users").authenticated()
+
+                .requestMatchers(POST, "/api/todolist/**").authenticated()
+                .requestMatchers(PATCH, "/api/todolist/**").authenticated()
+                .requestMatchers(DELETE, "/api/todolist/**").authenticated()
 
 
                 .anyRequest().authenticated());
-        // add the custom authentication filter to the http security object
-        http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(customAuthorizationFilter(userService), UsernamePasswordAuthenticationFilter.class);
+
 
         // Build the security filter chain to be returned.
         return http.build();

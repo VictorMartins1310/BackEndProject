@@ -1,4 +1,4 @@
-package com.victor.bootcampproject.security.supabase.filters;
+package com.victor.bootcampproject.security.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
