@@ -33,17 +33,6 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  */
 @Slf4j
 public abstract class CustomAuthorizationFilter extends OncePerRequestFilter {
-
-    public String getAlgorithmFromToken(@NotNull String token){
-        String alg = "HS256DEFAULT";
-        if (token.split("\\.").length == 3) {
-            String headerJson = new String(Base64.getUrlDecoder().decode(token.split("\\.")[0]));
-            JsonObject header = Json.createReader(new StringReader(headerJson)).readObject();
-            alg = header.getString("alg");
-        }
-        return alg;
-    }
-
     /**
      * The method doFilterInternal will handle the authorization of a user to access the API endpoints.
      *
