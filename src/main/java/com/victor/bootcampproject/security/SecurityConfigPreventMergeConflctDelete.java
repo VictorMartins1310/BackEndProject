@@ -3,9 +3,10 @@ package com.victor.bootcampproject.security;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -13,25 +14,13 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.List;
 
 @RequiredArgsConstructor
-public abstract class SecurityConfig {
+public abstract class SecurityConfigPreventMergeConflctDelete {
     // Instance of the AuthenticationManagerBuilder
     protected final AuthenticationManagerBuilder authManagerBuilder;
 
-    protected String[] listOfPermitAll = {
-            "/", "/types", "/api/users/register", "/h2-console/**",
-            "/**", "index.html", "/static/**", "/assets/**",
-            "/api/login",
-            "/api/login/**",
-            "/api/users/me",
-            "/api/users", "/api/users"
-    };
-    protected String[] listOfUser = {
-                        "/api/users", "/api/todolist/**", "/api/users",
-            "/api/todolist/**", "/api/todolist/**", "/api/todolist/**"
-    };
-
     /**
      * Bean definition for AuthenticationManager
+     *
      * @param authenticationConfiguration the instance of AuthenticationConfiguration
      * @return an instance of the AuthenticationManager
      * @throws Exception if there is an issue getting the instance of the AuthenticationManager
