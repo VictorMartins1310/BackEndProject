@@ -7,8 +7,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victor.bootcampproject.model.AppUser;
 import com.victor.bootcampproject.service.UserServiceLocal;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +19,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
 
 import static java.util.Arrays.stream;
@@ -40,23 +37,6 @@ public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
 
     public CustomAuthorizationFilterLocal(UserServiceLocal userService) {
         this.userService = userService;
-    }
-
-    public Algorithm getAlgorithm(@NonNull String token){
-        String algorithmType = "HS256DEFAULT";
-        if (token.split("\\.").length == 3) {
-            String headerJson = new String(Base64.getUrlDecoder().decode(token.split("\\.")[0]));
-            JsonObject header = Json.createReader(new StringReader(headerJson)).readObject();
-            algorithmType = header.getString("alg");
-        }
-        switch (algorithmType) {
-            case "HS256", "RS256":
-                return Algorithm.HMAC256("secret".getBytes()); //MySQL
-            case "HS384":
-                return Algorithm.HMAC384("secret".getBytes()); //Supabase?
-            default:
-                return Algorithm.HMAC512("secret".getBytes());
-        }
     }
 
     /**
