@@ -69,30 +69,19 @@ public class SecurityConfigSupabase extends SecurityConfig {
         // set up authorization for different request matchers and user roles
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
+                .requestMatchers(listOfPermitAll).permitAll()
+                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
 
-                .requestMatchers("/api/login").permitAll()
-                .requestMatchers("/api/users/register").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/", "/index.html", "/favicon.ico", "/assets/**").permitAll()
+                .requestMatchers(GET, listOfPermitAll).permitAll()
+                .requestMatchers(POST, listOfPermitAll).permitAll()
+                .requestMatchers(PATCH, listOfPermitAll).permitAll()
 
+                .requestMatchers(GET, listOfUser).hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
 
-                .requestMatchers(GET,"/api/types").authenticated()
-                .requestMatchers(GET, "/api/frequencies").permitAll()
-                .requestMatchers("/api/login/**").permitAll()
-                .requestMatchers("/api/admin/users").authenticated()
-                .requestMatchers(GET, "/api/users/me").permitAll()
-                .requestMatchers(POST, "/api/users").permitAll()
-                .requestMatchers(PATCH, "/api/users").permitAll()
-
-                .requestMatchers(GET,"/api/todolist/test").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(GET, "/api/todolist").authenticated()
-
-                .requestMatchers(PATCH, "/api/users").authenticated()
-
-                .requestMatchers(POST, "/api/todolist/**").authenticated()
-                .requestMatchers(PATCH, "/api/todolist/**").authenticated()
-                .requestMatchers(DELETE, "/api/todolist/**").authenticated()
-
+                .requestMatchers(POST, listOfUser).hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
+                .requestMatchers(DELETE, listOfUser).hasAnyAuthority("ROLE_USER")
 
                 .anyRequest().authenticated());
         // Add the custom authorization filter before the standard authentication filter.

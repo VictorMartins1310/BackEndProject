@@ -17,6 +17,19 @@ public abstract class SecurityConfig {
     // Instance of the AuthenticationManagerBuilder
     protected final AuthenticationManagerBuilder authManagerBuilder;
 
+    protected String[] listOfPermitAll = {
+            "/", "/types", "/api/users/register", "/h2-console/**",
+            "/**", "index.html", "/static/**", "/assets/**",
+            "/api/login",
+            "/api/login/**",
+            "/api/users/me",
+            "/api/users", "/api/users"
+    };
+    protected String[] listOfUser = {
+                        "/api/users", "/api/todolist/**", "/api/users",
+            "/api/todolist/**", "/api/todolist/**", "/api/todolist/**"
+    };
+
     /**
      * Bean definition for AuthenticationManager
      * @param authenticationConfiguration the instance of AuthenticationConfiguration

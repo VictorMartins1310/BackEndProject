@@ -65,30 +65,19 @@ public class SecurityConfigLocal extends SecurityConfig {
         // set up authorization for different request matchers and user roles
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
-
-                .requestMatchers("/").permitAll()   //for web
-
-                .requestMatchers("/types").permitAll()
-                .requestMatchers("/api/users/register").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/**", "index.html", "/static/**", "/assets/**").permitAll()
-
-                .requestMatchers("/api/login").permitAll()
-                .requestMatchers("/api/login/**").permitAll()
+                .requestMatchers(listOfPermitAll).permitAll()
                 .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
 
-                .requestMatchers(GET, "/api/users/me").permitAll()
-                .requestMatchers(POST, "/api/users").permitAll()
-                .requestMatchers(PATCH, "/api/users").permitAll()
+                .requestMatchers(GET, listOfPermitAll).permitAll()
+                .requestMatchers(POST, listOfPermitAll).permitAll()
+                .requestMatchers(PATCH, listOfPermitAll).permitAll()
 
-                .requestMatchers(GET,
-                        "/api/users", "/api/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, "/api/users").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(GET, listOfUser).hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
 
-                .requestMatchers(POST, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
-                .requestMatchers(DELETE, "/api/todolist/**").hasAnyAuthority("ROLE_USER")
-
+                .requestMatchers(POST, listOfUser).hasAnyAuthority("ROLE_USER")
+                .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
+                .requestMatchers(DELETE, listOfUser).hasAnyAuthority("ROLE_USER")
 
                 .anyRequest().authenticated());
         // add the custom authentication filter to the http security object
