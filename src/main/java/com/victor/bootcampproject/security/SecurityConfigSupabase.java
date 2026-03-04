@@ -40,7 +40,6 @@ public class SecurityConfigSupabase extends SecurityConfig {
         return new CustomAuthorizationFilterSupaBase(userService);
     }
 
-
     /**  Bean definition for PasswordEncoder
      *
      * @return an instance of the DelegatingPasswordEncoder

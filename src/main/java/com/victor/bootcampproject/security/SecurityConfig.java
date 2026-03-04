@@ -19,7 +19,7 @@ public abstract class SecurityConfig {
 
     protected String[] listOfPermitAll = {
             "/", "/types", "/api/users/register", "/h2-console/**",
-            "/**", "index.html", "/static/**", "/assets/**",
+            "index.html", "/static/**", "/assets/**",
             "/api/login",
             "/api/login/**",
             "/api/users/me",
