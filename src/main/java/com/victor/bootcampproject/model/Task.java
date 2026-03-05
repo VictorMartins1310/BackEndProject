@@ -8,14 +8,13 @@ import lombok.*;
 @Entity
 @Data
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @AllArgsConstructor
 @Table(schema = "AppTodo")
 public class Task extends TodoItem {
     @NotNull
     private String task;
     @NotNull
-    private Frequency frequency;
+    private Frequency frequency = Frequency.Once;
 
     public void markTaskCompleted(){ super.setCompleted(true); }
 }
