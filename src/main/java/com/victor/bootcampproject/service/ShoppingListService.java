@@ -44,7 +44,7 @@ public class ShoppingListService {
         return save(shoppingList);
     }
 
-    public ShoppingList updateShoppingList(Long id, String toDoListName, String marketName) {
+    public ShoppingList updateShoppingList(Long id, /*String toDoListName, */String marketName) {
         //if (shoppingListRepository.findShoppingListByTodoListID(id).isEmpty())
             //throw new ProjectException("Shopping List " + id + " Not Found");
         //ShoppingList shoppingList = shoppingListRepository.findShoppingListByTodoListID(id).get();
