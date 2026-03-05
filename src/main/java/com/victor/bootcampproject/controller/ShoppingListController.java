@@ -6,7 +6,7 @@ import com.victor.bootcampproject.model.AppUser;
 public interface ShoppingListController {
     Object newShoppingList(AppUser optionalUser, ShoppingListDTO shoppingList);
     Object showShoppingList(Long id);
-    Object updateShoppingList(Long id,String todolistname, String marketName);
+    Object updateShoppingList(Long id, String marketName);
     Object showShoppingLists(AppUser optionalUser);
     void deleteShoppingList(Long id);
 }

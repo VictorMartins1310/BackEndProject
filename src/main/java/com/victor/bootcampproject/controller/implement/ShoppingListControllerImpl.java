@@ -83,8 +83,9 @@ public class ShoppingListControllerImpl implements ShoppingListController{
     }
 
     @PatchMapping(value = "/{shoppingLID}")
-    public ShoppingList updateShoppingList(@PathVariable("shoppingLID") Long id, @RequestParam(value = "todoListName", required = false) String todoListName , @RequestParam("marketName") String marketName){
-        shoppingList = shoppingLService.updateShoppingList(id, todoListName, marketName);
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ShoppingList updateShoppingList(@PathVariable("shoppingLID") Long id, @RequestParam("marketName") String marketName){
+        shoppingList = shoppingLService.updateShoppingList(id, marketName);
         return shoppingList;
     }
     @DeleteMapping(value = "/{shoppingLID}")
