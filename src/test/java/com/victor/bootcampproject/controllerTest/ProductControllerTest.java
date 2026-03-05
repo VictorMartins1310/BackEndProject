@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,7 +58,6 @@ public class ProductControllerTest {
 
     @BeforeEach
     public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @DisplayName("Test: Create a Product")
@@ -85,7 +85,9 @@ public class ProductControllerTest {
         shoppingListProducts2.setProducts(productDTOList2);
 
         when(shoppingLMapper.toDTO(shoppingLService.addProduct2List(ShoppingListID, product))).thenReturn(shoppingListProducts);
-        mockMvc.perform(post("/todolist/shoppinglist/{idOfShoppingList}/products", productID.toString())
+        mockMvc.perform(
+                post("/api/todolist/shoppinglist/{idOfShoppingList}/products", productID.toString())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productDto1)))
                 .andExpect(status().isCreated())
@@ -106,8 +108,9 @@ public class ProductControllerTest {
         when(productService.updateProduct(productID, newProductName, null, null)).thenReturn(product2);
 
         mockMvc.perform(
-                patch("/todolist/shoppinglist/{idOfShoppingList}/product/{id}", productID.toString(), productID.toString())
-                        .queryParam("name", newProductName))
+                patch("/api/todolist/shoppinglist/{idOfShoppingList}/product/{id}", productID.toString(), productID.toString())
+                        .queryParam("name", newProductName)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(product2))); //change to get Fail
     }

@@ -30,6 +30,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,13 +59,10 @@ public class ShoppingListControllerTest {
 
     @BeforeEach
     public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        shoppingList.setTodoListID(shoppingListID);
+        shoppingList.setTodoID(shoppingListID);
 
         shoppingListDTO1.setMarketName(marketNameIN);
         shoppingListDTO2.setMarketName(marketNameOUT);
-        shoppingListDTO1.setTodoListName(shoppingList.getTodoListName());
-        shoppingListDTO2.setTodoListName(shoppingList.getTodoListName());
 
         user.setUserID(userID);
     }
@@ -76,7 +74,8 @@ public class ShoppingListControllerTest {
 
         when(shoppingLMapper.toDto(shoppingListService.newShoppingList(user, marketNameIN))).thenReturn(shoppingListDTO1);
 
-        mockMvc.perform(post("/todolist/shoppinglist")
+        mockMvc.perform(post("/api/todolist/shoppinglist")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(shoppingListDTO1)))
                 .andExpect(status().isCreated())
@@ -114,7 +113,9 @@ public class ShoppingListControllerTest {
 
         when(shoppingLMapper.toDTO(shoppingListService.getShoppingList(shoppingListID))).thenReturn(shoppingListDto);
 
-        mockMvc.perform(get("/todolist/shoppinglist/{shopID}", shoppingListID.toString()))
+        mockMvc.perform(
+                get("/api/todolist/shoppinglist/{shopID}", shoppingListID.toString())
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(shoppingListDto))); // Set shoppingListDtoFail to Fail Test
     }
@@ -123,18 +124,20 @@ public class ShoppingListControllerTest {
     @WithMockUser(username = "testUser", roles = "USER")
     @Test
     public void testUpdateShoppingList() throws Exception {
-        ShoppingList shoppingListB = new ShoppingList(user, marketNameIN);
-        shoppingListB.setTodoListID(shoppingListID);
-        shoppingListB.setTodoListName(shoppingList.getTodoListName());
-        shoppingListB.setMarketName(marketNameOUT);
+        ShoppingList shoppingListB = new ShoppingList(user, marketNameOUT);
+        shoppingListB.setTodoID(shoppingListID);
 
-        when(shoppingListService.updateShoppingList(shoppingListID, null, marketNameIN)).thenReturn(shoppingList);
+        System.out.println(shoppingList);
+        System.out.println(shoppingListB);
+
+        when(shoppingListService.updateShoppingList(shoppingListID, marketNameOUT)).thenReturn(shoppingListB);
 
         mockMvc.perform(
-                        patch("/todolist/shoppinglist/{id}", shoppingListID.toString())
-                                .queryParam("marketname", marketNameIN))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(shoppingList))); // Set ShoppingListB to Fail Test
+                        patch("/api/todolist/shoppinglist/{shoppingLID}", shoppingList.getTodoID())
+                                .with(csrf())
+                                .queryParam("marketName", marketNameOUT))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json(objectMapper.writeValueAsString(shoppingListB))); // Set ShoppingListB to Fail Test
     }
 
     @DisplayName("Test: Delete Shopping List")
@@ -142,7 +145,8 @@ public class ShoppingListControllerTest {
     @Test public void testDeleteShoppingList() throws Exception {
         doNothing().when(shoppingListService).deleteShoppingList(shoppingListID);
         mockMvc.perform(
-                        delete("/todolist/shoppinglist/{id}", shoppingListID.toString()))
+                        delete("/api/todolist/shoppinglist/{id}", shoppingListID.toString())
+                                .with(csrf()))
                 .andExpect(status().isNoContent());
     }
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,7 +41,6 @@ public class AdminControllerTest {
     private final AppUser user = new AppUser("Admin@mail.de","badPassword");
 
     @BeforeEach public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
     @DisplayName("Test: Get All Users")
     @WithMockUser(username = "testUser", roles = "USER")
@@ -51,7 +51,9 @@ public class AdminControllerTest {
 
         when(userService.showUsers()).thenReturn(users);
 
-        mockMvc.perform(get("/admin/users"))
+        mockMvc.perform(
+                get("/api/admin/users")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(users)));
     }
@@ -65,7 +67,8 @@ public class AdminControllerTest {
 
         doNothing().when(userService).deleteUserByID(uuid);
         mockMvc.perform(
-                        delete("/admin/users/{uuid}", uuid.toString()))
+                        delete("/api/admin/users/{uuid}", uuid.toString())
+                                .with(csrf()))
                 .andExpect(status().isNoContent());
     }
 }

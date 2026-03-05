@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -52,7 +53,6 @@ public class AppUserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         role.setRole("USER_ROLE");
 
         user1.setUserID(UUID.randomUUID());
@@ -79,7 +79,9 @@ public class AppUserControllerTest {
 
         when(userDetailsMapper.toDto(userService.newUser("email@mail.com", "PassWORTd"))).thenReturn(userDto1);
 
-        mockMvc.perform(post("/users/register")
+        mockMvc.perform(
+                post("/api/users/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDto)))
                 .andExpect(status().isCreated())
@@ -98,7 +100,8 @@ public class AppUserControllerTest {
         when(userDetailsMapper.toDto(userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()))).thenReturn(userDetails);
 
         mockMvc.perform(
-                        get("/users"))
+                        get("/api/users")
+                                .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(userDetails))); //https://github.com/json-path/JsonPath
     }
@@ -122,7 +125,8 @@ public class AppUserControllerTest {
                 .thenReturn(userDetailsDTO1);
 
         mockMvc.perform(
-                        patch("/users/register/details")
+                        patch("/api/users/register/details")
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(userDetailsDTO1)))
                 .andExpect(status().isOk())
