@@ -1,14 +1,14 @@
 spring:
   profiles:
-    active: dev
-  datasource:
-    url: jdbc:mysql://localhost:3306/Project
-    username: VictorMartins
-    password: badPassword
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    active: dev-MySQL
   jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+  web:
+    cors:
+      allowed-origins:
+        - "http://msi:8710"
+      allowed-methods: "GET,POST, PATCH, PUT,DELETE,OPTIONS"
+      allowed-headers: "*"
+      allow-credentials: true
+
 server:
   port: 8710

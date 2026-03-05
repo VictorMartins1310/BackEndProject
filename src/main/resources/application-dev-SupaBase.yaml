@@ -4,20 +4,14 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: Pass8bad!word@26
-
-    hikari:
-      max-lifetime: 180000   # 3 Minuten
-      idle-timeout: 120000   # 2 Minuten
-      minimum-idle: 1
-      maximum-pool-size: 5
   jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: app_todo
-    hibernate:
-      ddl-auto: update
-    show-sql: false
+    show-sql: true
   web:
     cors:
       allowed-origins:
@@ -26,7 +20,13 @@ spring:
         - "http://192.168.178.253:8710"
         - "http://192.168.178.253:5173"
         - "http://msi:5173"
+        - "http://msi:8710"
       allowed-methods: "GET,POST, PATCH, PUT,DELETE,OPTIONS"
       allowed-headers: "*"
       allow-credentials: true
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security.oauth2: DEBUG

@@ -1,17 +1,13 @@
 spring:
   datasource:
-    url: jdbc:h2:file:./src/data/testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
+    url: jdbc:mysql://localhost:3306/Project
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: VictorMartins
+    password: badPassword
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
   web:
     cors:
       allowed-origins:
