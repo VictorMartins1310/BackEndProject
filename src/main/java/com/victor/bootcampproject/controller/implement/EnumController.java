@@ -15,10 +15,8 @@ public class EnumController {
      * @return List of Product Types (as String)
      */
     @GetMapping("api/types")
-    public List<String> getTypeValues() {
-        return Arrays.stream(ProductType.values())
-                .map(Enum::name)
-                .toList();
+    public List<ProductType> getTypeValues() {
+        return Arrays.asList(ProductType.values());
     }
 
     /**
@@ -26,9 +24,7 @@ public class EnumController {
      * @return List of Frequencies (as String)
      */
     @GetMapping("api/frequencies")
-    public List<String> getFrequencyValues() {
-        return Arrays.stream(Frequency.values())
-                .map(Enum::name)
-                .toList();
+    public List<Frequency> getFrequencyValues() {
+        return Arrays.asList(Frequency.values());
     }
 }

@@ -3,6 +3,7 @@ package com.victor.bootcampproject.service;
 import com.victor.bootcampproject.model.AppUser;
 import com.victor.bootcampproject.repos.RoleRepository;
 import com.victor.bootcampproject.repos.UserRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,11 +14,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Profile("dev-MySQL")
 @Service
 public class UserServiceLocal extends UserService implements UserDetailsService {
     public UserServiceLocal(UserRepository userRepo, RoleRepository roleRepository, ShoppingListService shoppingListService, PasswordEncoder passwordEncoder) {
         super(userRepo, roleRepository, shoppingListService, passwordEncoder);
     }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Retrieve user with the given username

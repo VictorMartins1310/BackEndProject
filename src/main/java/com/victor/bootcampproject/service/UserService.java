@@ -6,6 +6,7 @@ import com.victor.bootcampproject.model.Role;
 import com.victor.bootcampproject.repos.RoleRepository;
 import com.victor.bootcampproject.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -41,15 +42,21 @@ public abstract class UserService{
             return roleRepository.findByRole(name).get();
     }
 
+
+    public AppUser save(@NonNull AppUser user, String role){
+        user.addRole(addRole(role));
+        return userRepo.save(user);
+    }
+
     public AppUser newAdmin(String email, String password){
         AppUser user = new AppUser(email, password);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return save(user, "ROLE_ADMIN");
     }
 
-    public AppUser save(AppUser user, String role){
-        user.addRole(addRole(role));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+    public AppUser newAdmin(String email){
+        AppUser user = new AppUser(email);
+        return save(user, "ROLE_ADMIN");
     }
 
     /** Creates a new User
@@ -63,13 +70,22 @@ public abstract class UserService{
     public AppUser newUser(String email, String password){
         AppUser user = new AppUser(email, password);
         user.setUserID(UUID.randomUUID());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return save(user, "ROLE_USER");
     }
+
     public AppUser newUser(UUID uuid, String email, String password){
         AppUser user = new AppUser(email, password);
         user.setUserID(uuid);
         return save(user, "ROLE_USER");
     }
+
+    public AppUser newUser(UUID uuid, String email){
+        AppUser user = new AppUser(email);
+        user.setUserID(uuid);
+        return save(user, "ROLE_USER");
+    }
+
     public AppUser getUserByUserID(UUID id){
         if (userRepo.getUserByUserID(id).isEmpty())
             throw new ProjectException("User Not Found");
@@ -81,7 +97,7 @@ public abstract class UserService{
             throw new ProjectException("User Not Found");
         return userRepo.getUserByEmail(email).get();
     }
-    public AppUser updateDetails(AppUser loggedUser, String firstName, String lastName, String birthDate) {
+    public AppUser updateDetails(@NonNull AppUser loggedUser, String firstName, String lastName, String birthDate) {
         if (userRepo.getUserByUserID(loggedUser.getUserID()).isEmpty())
             throw new ProjectException("User Not Found");
         loggedUser.updateDetails(firstName, lastName, LocalDate.parse(birthDate));

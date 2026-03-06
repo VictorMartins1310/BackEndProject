@@ -1,35 +1,27 @@
 package com.victor.bootcampproject.service;
 
 import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.model.Role;
 import com.victor.bootcampproject.repos.RoleRepository;
 import com.victor.bootcampproject.repos.UserRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Profile("dev-SupaBase")
 @Service
-@RequiredArgsConstructor
-public class UserServiceSupaBase{
-    private final UserRepository userRepo;
-    private final RoleRepository roleRepository;
-
-    public Role addRole(String name){
-        if (roleRepository.findByRole(name).isEmpty()) {
-            return roleRepository.save(new Role(name));
-        }else
-            return roleRepository.findByRole(name).get();
+public class UserServiceSupaBase extends UserService{
+    public UserServiceSupaBase(UserRepository userRepo, RoleRepository roleRepository, ShoppingListService shoppingListService, PasswordEncoder passwordEncoder) {
+        super(userRepo, roleRepository, shoppingListService, passwordEncoder);
     }
 
     public AppUser syncUserFromSupabase(UUID uuid, String email) {
         Optional<AppUser> user = userRepo.getUserByUserID(uuid);
         if (user.isPresent())
             return user.get();
-        AppUser newUser = new AppUser(email, null);
-        newUser.setUserID(uuid);
-        newUser.addRole(addRole("ROLE_USER"));
+        AppUser newUser = super.newUser(uuid, email);
         return userRepo.save(newUser);
     }
 }

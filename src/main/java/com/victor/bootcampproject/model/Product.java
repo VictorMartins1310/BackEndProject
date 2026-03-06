@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 
@@ -21,7 +23,10 @@ public class Product {
     private String  brand;
     private BigDecimal price;
     private int      qty;
-    private ProductType type;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "app_todo.product_type")
+    private ProductType type = ProductType.Other;
     /** True means products bought, False means to be bought */
     private Boolean bought = false;
 

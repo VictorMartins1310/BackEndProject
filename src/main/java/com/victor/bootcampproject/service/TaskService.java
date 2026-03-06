@@ -5,6 +5,7 @@ import com.victor.bootcampproject.model.AppUser;
 import com.victor.bootcampproject.model.Task;
 import com.victor.bootcampproject.repos.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class TaskService {
     // Repositories
     private final TaskRepository taskRepository;
 
-    public Task newTask(AppUser user, Task task){
+    public Task newTask(AppUser user, @NonNull Task task){
         Task newTask = new Task(task.getTask(), task.getFrequency());
         newTask.setUser(user);
         return taskRepository.save(newTask);

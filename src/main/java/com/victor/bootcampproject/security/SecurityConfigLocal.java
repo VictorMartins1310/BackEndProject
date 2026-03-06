@@ -66,20 +66,16 @@ public class SecurityConfigLocal extends SecurityConfig {
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(listOfPermitAll).permitAll()
-                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
-
-                .requestMatchers(GET, listOfPermitAll).permitAll()
-                .requestMatchers(POST, listOfPermitAll).permitAll()
-                .requestMatchers(PATCH, listOfPermitAll).permitAll()
 
                 .requestMatchers(GET, listOfUser).hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
-
                 .requestMatchers(POST, listOfUser).hasAnyAuthority("ROLE_USER")
                 .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
                 .requestMatchers(DELETE, listOfUser).hasAnyAuthority("ROLE_USER")
 
-                .anyRequest().authenticated());
+                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
+
+                .anyRequest().authenticated()
+        );
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.

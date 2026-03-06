@@ -34,11 +34,17 @@ public class AppUser {
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
+    public AppUser(String email) {
+        setUserID(UUID.randomUUID());
+        setEmail(email.toLowerCase());
+    }
+
     public AppUser(String email, String password) {
         setUserID(UUID.randomUUID());
         setEmail(email.toLowerCase());
         setPassword(password);
     }
+
     public void addRole(Role role){
         roles.add(role);
     }

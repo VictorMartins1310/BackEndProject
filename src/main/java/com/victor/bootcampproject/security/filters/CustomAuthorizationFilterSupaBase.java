@@ -6,7 +6,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.security.SupabaseConfig;
 import com.victor.bootcampproject.service.UserServiceSupaBase;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,10 +33,8 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  */
 @Slf4j
 @Profile({"dev-SupaBase"})
-public class CustomAuthorizationFilterSupaBase extends com.victor.bootcampproject.security.filters.CustomAuthorizationFilter {
-
+public class CustomAuthorizationFilterSupaBase extends CustomAuthorizationFilter {
     private final UserServiceSupaBase userService;
-    private SupabaseConfig supabaseConfig = new SupabaseConfig();
 
     public CustomAuthorizationFilterSupaBase(UserServiceSupaBase userService) {
         this.userService = userService;

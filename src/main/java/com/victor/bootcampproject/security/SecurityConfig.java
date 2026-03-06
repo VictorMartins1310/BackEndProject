@@ -3,13 +3,14 @@ package com.victor.bootcampproject.security;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,17 +18,27 @@ public abstract class SecurityConfig {
     // Instance of the AuthenticationManagerBuilder
     protected final AuthenticationManagerBuilder authManagerBuilder;
 
-    protected String[] listOfPermitAll = {
-            "/", "/types", "/api/users/register", "/h2-console/**",
+    protected String[]
+            listOfPermitAll = {
+            "/", "/api/users/register", "/h2-console/**",
             "index.html", "/static/**", "/assets/**",
             "/api/login",
             "/api/login/**",
-            "/api/users/me",
-            "/api/users", "/api/users"
-    };
-    protected String[] listOfUser = {
-                        "/api/users", "/api/todolist/**", "/api/users",
-            "/api/todolist/**", "/api/todolist/**", "/api/todolist/**"
+            "/api/types", "/api/frequencies"
+    },
+            listOfUser = {
+            "/api/users", "/api/users",
+            "/api/todolist", "/api/todolist/*", "/api/todolist/**"
+    },
+    listOfAllowedOrigins = {
+            "http://localhost:5173",
+            "http://localhost:4173",
+            "http://192.168.178.253:5173",
+            "http://msi:5173",
+
+            "http://localhost:8710",
+            "http://192.168.178.253:8710",
+            "http://msi:8710"
     };
 
     /**
@@ -44,15 +55,7 @@ public abstract class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://localhost:4173",
-                "http://192.168.178.253:5173",
-                "http://msi:5173",
-
-                "http://localhost:8710",
-                "http://192.168.178.253:8710",
-                "http://msi:8710"));
+        config.setAllowedOrigins(Arrays.stream(listOfAllowedOrigins).toList());
 
         config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

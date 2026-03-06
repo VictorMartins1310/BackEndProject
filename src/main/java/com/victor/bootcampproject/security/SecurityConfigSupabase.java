@@ -35,11 +35,6 @@ public class SecurityConfigSupabase extends SecurityConfig {
         this.userService = userService;
     }
 
-    @Bean
-    public CustomAuthorizationFilterSupaBase customAuthorizationFilter(UserServiceSupaBase userService) {
-        return new CustomAuthorizationFilterSupaBase(userService);
-    }
-
     /**  Bean definition for PasswordEncoder
      *
      * @return an instance of the DelegatingPasswordEncoder
@@ -69,23 +64,18 @@ public class SecurityConfigSupabase extends SecurityConfig {
         // modify this to have different configurations
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(listOfPermitAll).permitAll()
-                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
-
-                .requestMatchers(GET, listOfPermitAll).permitAll()
-                .requestMatchers(POST, listOfPermitAll).permitAll()
-                .requestMatchers(PATCH, listOfPermitAll).permitAll()
 
                 .requestMatchers(GET, listOfUser).hasAnyAuthority("ROLE_USER")
-                .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
-
                 .requestMatchers(POST, listOfUser).hasAnyAuthority("ROLE_USER")
                 .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
                 .requestMatchers(DELETE, listOfUser).hasAnyAuthority("ROLE_USER")
 
+                .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
+
                 .anyRequest().authenticated());
         // Add the custom authorization filter before the standard authentication filter.
 
-        http.addFilterBefore(customAuthorizationFilter(userService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilterSupaBase(userService), UsernamePasswordAuthenticationFilter.class);
 
 
         // Build the security filter chain to be returned.
