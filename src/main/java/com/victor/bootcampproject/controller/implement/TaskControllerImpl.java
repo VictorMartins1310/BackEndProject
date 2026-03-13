@@ -3,6 +3,7 @@ package com.victor.bootcampproject.controller.implement;
 import com.victor.bootcampproject.controller.TaskController;
 import com.victor.bootcampproject.dto.TaskDTO;
 import com.victor.bootcampproject.mappers.TaskMapper;
+import com.victor.bootcampproject.model.Frequency;
 import com.victor.bootcampproject.model.Task;
 import com.victor.bootcampproject.model.AppUser;
 import com.victor.bootcampproject.service.TaskService;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /** This Controller is destined for Tasks
 * It can Create and Update a Task
@@ -45,6 +48,12 @@ public class TaskControllerImpl implements TaskController {
     @ResponseStatus(HttpStatus.OK)
     public Task getTaskList(@PathVariable("taskLID") Long idTask){
         return taskService.getTask(idTask);
+    }
+
+    @GetMapping(value = "/daily")
+    public Optional<Task> getDailyTasks(@AuthenticationPrincipal AppUser user){
+        loggedUser = getAuthUser(user);
+        return taskService.getTasksByFrequency(loggedUser, Frequency.Daily);
     }
 
     @PatchMapping(value = "/{taskID}/done")

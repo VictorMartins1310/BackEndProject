@@ -2,6 +2,7 @@ package com.victor.bootcampproject.service;
 
 import com.victor.bootcampproject.exception.ProjectException;
 import com.victor.bootcampproject.model.AppUser;
+import com.victor.bootcampproject.model.Frequency;
 import com.victor.bootcampproject.model.Task;
 import com.victor.bootcampproject.repos.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,12 @@ public class TaskService {
         return taskRepository.getTaskByTodoID(id).get();
     }
 
-    public List<Task> getTasks(AppUser user){
+    public List<Task> getAllTasks(AppUser user){
         return taskRepository.findByUser(user).stream().toList();
+    }
+
+    public Optional<Task> getTasksByFrequency(AppUser user, Frequency frequency){
+        return taskRepository.getTasksByFrequencyAndUser(frequency, user);
     }
 
     public void markTaskCompleted(Long id){
