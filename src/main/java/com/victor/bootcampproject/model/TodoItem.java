@@ -20,6 +20,7 @@ public abstract class TodoItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long todoID;
     private Date creationDate = new Date();
+    private Date doOnDay = new Date();
     /** True means Done, False to be Do */
     private Boolean completed = false;
 
