@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @EnableWebSecurity
-@Profile("dev-SupaBase")
+@Profile({"dev-SupaBase", "prod" })
 public class SecurityConfigSupabase extends SecurityConfig {
 
     private final UserServiceSupaBase userService;

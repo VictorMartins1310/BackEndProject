@@ -32,7 +32,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  * authorization of a user to access the API endpoints.
  */
 @Slf4j
-@Profile({"dev-SupaBase"})
+@Profile({"dev-SupaBase", "prod"})
 public class CustomAuthorizationFilterSupaBase extends CustomAuthorizationFilter {
     private final UserServiceSupaBase userService;
 
