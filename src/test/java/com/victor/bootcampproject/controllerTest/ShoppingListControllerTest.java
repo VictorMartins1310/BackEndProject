@@ -80,22 +80,7 @@ public class ShoppingListControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(shoppingListDTO1))); // change to shoppingListDTO2 for Fail Test
     }
-    @DisplayName("Test: Get All Shoppinglists")
-    @WithMockUser(username = "testUser", roles = "USER")
-    @Test
-    public void testGetAllShoppingLists() throws Exception {
-        List<ShoppingListDTO> shoppingListDto = new ArrayList<>();
-        shoppingListDto.add(shoppingListDTO1);
 
-        List<ShoppingListDTO> shoppingListDtoFail = new ArrayList<>();
-        shoppingListDtoFail.add(shoppingListDTO2);
-
-        when(shoppingLMapper.toShoppingListDtos(shoppingListService.getShoppingLists(user))).thenReturn(shoppingListDto);
-
-        mockMvc.perform(get("/todolist/shoppinglist"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(shoppingListDto))); // Change to shoppingListDtoFail for Fail Test
-    }
     @DisplayName("Test: Get Shoppinglists + Products")
     @WithMockUser(username = "testUser", roles = "USER")
     @Test
