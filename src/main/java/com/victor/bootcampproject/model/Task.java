@@ -6,11 +6,13 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(schema = "AppTodo")
 public class Task extends TodoItem {
     @NotNull
@@ -20,6 +22,8 @@ public class Task extends TodoItem {
     @Column(columnDefinition = "app_todo.frequency")
     @NotNull
     private Frequency frequency = Frequency.Once;
+    @OneToMany
+    private List<RealizedOnDay> realizedOn = new ArrayList<>();
 
     public void markTaskCompleted(){ super.setCompleted(true); }
 }
