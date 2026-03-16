@@ -32,7 +32,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  * authorization of a user to access the API endpoints.
  */
 @Slf4j
-@Profile({"dev-SupaBase", "prod"})
+@Profile({"dev-SupaBase", "prod", "default"})
 public class CustomAuthorizationFilterSupaBase extends CustomAuthorizationFilter {
     private final UserServiceSupaBase userService;
 
@@ -60,7 +60,6 @@ public class CustomAuthorizationFilterSupaBase extends CustomAuthorizationFilter
             return;
         }*/
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        System.out.println("AUTHORIZATION HEADER" + request.getHeader(AUTHORIZATION));
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {

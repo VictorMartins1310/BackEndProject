@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 
-@Profile({"dev-SupaBase", "prod"})
+@Profile({"dev-SupaBase", "prod", "default" })
 @Service
 public class UserServiceSupaBase extends UserService{
     public UserServiceSupaBase(UserRepository userRepo, RoleRepository roleRepository, ShoppingListService shoppingListService, PasswordEncoder passwordEncoder) {
