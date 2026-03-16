@@ -7,7 +7,6 @@ import java.util.Date;
 public class ToDoListDTO {
     private Long todoID;
     protected String type;
-    private Date creationDate;
     private Date doOnDay;
     private Boolean completed;
 }

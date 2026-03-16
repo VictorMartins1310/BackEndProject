@@ -2,7 +2,7 @@ package com.victor.bootcampproject.controller.implement;
 
 import com.victor.bootcampproject.model.AppUser;
 import com.victor.bootcampproject.model.Role;
-import com.victor.bootcampproject.service.UserService;
+import com.victor.bootcampproject.service.UserServiceSupaBase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping()
 public class AdminController {
-    private final UserService userService;
+    private final UserServiceSupaBase userService; // Attention on working Local, need to be changed to UserServiceLocal
     private final String admin = "api/admin";
 
 
