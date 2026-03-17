@@ -3,16 +3,12 @@ package com.victor.bootcampproject.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 
 @Data
 @Entity
-@RequiredArgsConstructor
-@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "AppTodo")
 public abstract class TodoItem {
@@ -30,6 +26,7 @@ public abstract class TodoItem {
     @ManyToOne(optional = false)
     private AppUser user;
 
+    // Todo Review if this function is necessary
     public String Type(){
         return this.getClass().getSimpleName();
     }

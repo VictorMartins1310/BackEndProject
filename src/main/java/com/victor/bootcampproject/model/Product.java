@@ -1,7 +1,6 @@
 package com.victor.bootcampproject.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -12,8 +11,6 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @NoArgsConstructor
-//@RequiredArgsConstructor
-@AllArgsConstructor
 @Table(schema = "AppTodo")
 public class Product {
     @Id
@@ -31,11 +28,11 @@ public class Product {
     private Boolean bought = false;
 
     public Product(String name, String brand, BigDecimal price, int qty, ProductType type) {
-        this.name   = name;
-        this.brand  = brand;
-        this.price  = price;
-        this.qty    = qty;
-        this.type   = type;
+        setName(name);
+        setBrand(brand);
+        setPrice(price);
+        setQty(qty);
+        setType(type);
     }
 
     public Product productBought(int qty){

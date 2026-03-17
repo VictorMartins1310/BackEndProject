@@ -1,15 +1,12 @@
 package com.victor.bootcampproject.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-//@RequiredArgsConstructor
-@AllArgsConstructor
 @Table(schema = "AppTodo")
 public class Role {
     @Id
@@ -18,5 +15,4 @@ public class Role {
     private String role;
 
     public Role(String role) { this.role = role; }
-
 }

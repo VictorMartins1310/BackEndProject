@@ -1,9 +1,9 @@
 package com.victor.bootcampproject.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -16,15 +16,12 @@ import static jakarta.persistence.FetchType.EAGER;
 @Entity
 @Data
 @NoArgsConstructor
-//@RequiredArgsConstructor
-@AllArgsConstructor
 @Table(schema = "AppTodo")
 public class AppUser {
     @Id
     private UUID userID;
-    @Column(unique=true) // for dont getting doubled email adresses
+    @Column(unique=true) // for avoid get doubled email Address's
     private String email;
-    private String password;
     // User Details
     private String firstName;
     private String lastName;
@@ -34,15 +31,18 @@ public class AppUser {
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
-    public AppUser(String email) {
+    public AppUser(@NonNull String email) {
         setUserID(UUID.randomUUID());
-        setEmail(email.toLowerCase());
+        setEmail(email);
     }
 
-    public AppUser(String email, String password) {
-        setUserID(UUID.randomUUID());
-        setEmail(email.toLowerCase());
-        setPassword(password);
+    public AppUser(UUID userID, @NonNull String email) {
+        setUserID(userID);
+        setEmail(email);
+    }
+
+    public void setEmail(@NonNull String email) {
+        this.email = email.toLowerCase();
     }
 
     public void addRole(Role role){

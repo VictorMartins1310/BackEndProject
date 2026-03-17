@@ -10,10 +10,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-//@DynamicUpdate
 @NoArgsConstructor
-//@RequiredArgsConstructor
-@AllArgsConstructor
 @Table(schema = "AppTodo")
 public class ShoppingList extends TodoItem{
     private String marketName;
