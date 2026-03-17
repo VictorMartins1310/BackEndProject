@@ -1,15 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db.nltqgtftdcbzdbgubmoa.supabase.co:5432/postgres?sslmode=require
+    url: jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: Pass8bad!word@26
-
-    hikari:
-      max-lifetime: 180000   # 3 Minuten
-      idle-timeout: 120000   # 2 Minuten
-      minimum-idle: 1
-      maximum-pool-size: 5
+    username: postgres.nltqgtftdcbzdbgubmoa
+    password: 'Pass8bad!word@26'
   jpa:
     properties:
       hibernate:
@@ -18,15 +12,8 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: false
-  web:
-    cors:
-      allowed-origins:
-        - "http://localhost:8710"
-        - "http://localhost:5173"
-        - "http://192.168.178.253:8710"
-        - "http://192.168.178.253:5173"
-        - "http://msi:5173"
-      allowed-methods: "GET,POST, PATCH, PUT,DELETE,OPTIONS"
-      allowed-headers: "*"
-      allow-credentials: true
-
+    hikari:
+      max-lifetime: 180000   # 3 Minuten
+      idle-timeout: 120000   # 2 Minuten
+      minimum-idle: 1
+      maximum-pool-size: 5

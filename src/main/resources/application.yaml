@@ -1,14 +1,6 @@
 spring:
   profiles:
-    active: dev-MySQL
-  jpa:
-  web:
-    cors:
-      allowed-origins:
-        - "http://msi:8710"
-      allowed-methods: "GET,POST, PATCH, PUT,DELETE,OPTIONS"
-      allowed-headers: "*"
-      allow-credentials: true
+    active: prod
 
 server:
   port: 8710

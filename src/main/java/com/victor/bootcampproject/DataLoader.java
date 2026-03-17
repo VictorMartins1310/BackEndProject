@@ -5,12 +5,14 @@ import com.victor.bootcampproject.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Profile("dev-MySQL")
 public class DataLoader implements ApplicationListener<ApplicationReadyEvent> {
     private final UserService userService;
     private final ShoppingListService shoppingListService;
