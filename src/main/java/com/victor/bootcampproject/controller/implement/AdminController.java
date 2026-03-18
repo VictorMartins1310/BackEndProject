@@ -4,6 +4,7 @@ import com.victor.bootcampproject.model.AppUser;
 import com.victor.bootcampproject.model.Role;
 import com.victor.bootcampproject.service.UserServiceSupaBase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,11 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping()
+@RequestMapping
+@Profile({ "dev-SupaBase", "prod", "default" })
 public class AdminController {
     private final UserServiceSupaBase userService; // Attention on working Local, need to be changed to UserServiceLocal
     private final String admin = "api/admin";
-
 
     /**
      * Save a new role

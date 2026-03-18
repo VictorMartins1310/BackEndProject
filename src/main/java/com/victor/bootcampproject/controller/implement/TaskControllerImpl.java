@@ -3,15 +3,11 @@ package com.victor.bootcampproject.controller.implement;
 import com.victor.bootcampproject.controller.TaskController;
 import com.victor.bootcampproject.dto.TaskDTO;
 import com.victor.bootcampproject.mappers.TaskMapper;
-import com.victor.bootcampproject.model.Frequency;
-import com.victor.bootcampproject.model.Task;
-import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.service.TaskService;
-import com.victor.bootcampproject.service.UserService;
+import com.victor.bootcampproject.model.*;
+import com.victor.bootcampproject.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,21 +21,20 @@ import java.util.Optional;
 @RequestMapping(name = "tasklist", value = "api/todolist/tasklist")
 public class TaskControllerImpl implements TaskController {
     private final TaskService taskService;
-    private final UserService userService;
 
     private final TaskMapper taskMapper;
 
+/*
     private AppUser loggedUser;
 
     private AppUser getAuthUser(AppUser optionalUser) {
         if (optionalUser != null) return optionalUser;
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
-
+*/
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task addTask(@AuthenticationPrincipal AppUser optionalUser, @RequestBody TaskDTO taskDTO){
-        loggedUser = getAuthUser(optionalUser);
+    public Task addTask(@AuthenticationPrincipal AppUser loggedUser, @RequestBody TaskDTO taskDTO){
         Task newTask = taskMapper.toEntity(taskDTO);
         return taskService.newTask(loggedUser, newTask);
     }
@@ -50,17 +45,15 @@ public class TaskControllerImpl implements TaskController {
         return taskService.getTask(idTask);
     }
 
-    @GetMapping(value = "/daily")
-    public Optional<Task> getDailyTasks(@AuthenticationPrincipal AppUser user){
-        loggedUser = getAuthUser(user);
-        return taskService.getTasksByFrequency(loggedUser, Frequency.Daily);
+    @GetMapping
+    public Optional<Task> getDailyTasks(@AuthenticationPrincipal AppUser loggedUser, @RequestParam("freq") Frequency freq){
+        return taskService.getTasksByFrequency(loggedUser, freq);
     }
 
     @PatchMapping(value = "/{taskID}/done")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void markTaskCompleted(@PathVariable("taskID") Long idTask){
         taskService.markTaskCompleted(idTask);
-        //return taskService.getTask(idTask);
     }
 
     @PatchMapping(value = "/{taskLID}/task/{taskID}")

@@ -4,9 +4,10 @@ import com.victor.bootcampproject.controller.UserController;
 import com.victor.bootcampproject.dto.UserDetailsDTO;
 import com.victor.bootcampproject.dto.LoginDTO;
 import com.victor.bootcampproject.mappers.UserDetailsMapper;
-import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.service.UserService;
+import com.victor.bootcampproject.model.*;
+import com.victor.bootcampproject.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(name = "users", value = "api/users")
+@Profile({ "dev-MySQL", "dev-h2" })
 public class UserControllerImpl implements UserController {
-    private final UserService userService;
-
+    private final UserServiceLocal userService;
     private final UserDetailsMapper userDetailsMapper;
 
     // private fields
+    // Todo Remove loggedUser
     private AppUser loggedUser;
 
     /**

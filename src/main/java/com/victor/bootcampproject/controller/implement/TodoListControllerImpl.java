@@ -4,8 +4,7 @@ import com.victor.bootcampproject.controller.TodoListController;
 import com.victor.bootcampproject.dto.ToDoListDTO;
 import com.victor.bootcampproject.mappers.TodoListMapper;
 import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.service.TodoItemService;
-import com.victor.bootcampproject.service.UserService;
+import com.victor.bootcampproject.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,10 +25,22 @@ public class TodoListControllerImpl implements TodoListController {
 
     private final UserService userService;
 
-    /** Method that show all Lists that a User haves */
+    /**
+     * Method that show all Lists that a User haves
+     */
+//    @GetMapping
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<ToDoListDTO> getAllTodoLists(@AuthenticationPrincipal AppUser loggedUser) {
+//        return todoListMapper.toDto(toDoListService.getAllItems(loggedUser));
+//    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ToDoListDTO> getTodoList(@AuthenticationPrincipal AppUser loggedUser){
+    public List<ToDoListDTO> getTodoLists(@AuthenticationPrincipal AppUser loggedUser, @RequestParam(required = true, value = "completed", defaultValue = "2") int completed) {
+        if (completed == 0)
+            return todoListMapper.toDto(toDoListService.getItemsDone(loggedUser));
+        if (completed == 1)
+            return todoListMapper.toDto(toDoListService.getItemsNotDone(loggedUser));
         return todoListMapper.toDto(toDoListService.getAllItems(loggedUser));
     }
 }
