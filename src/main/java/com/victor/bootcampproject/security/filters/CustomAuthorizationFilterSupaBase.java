@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.service.UserServiceSupaBase;
+import com.victor.bootcampproject.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.security.interfaces.ECPublicKey;
-import java.security.spec.*;
 import java.util.*;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -34,9 +33,9 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @Slf4j
 @Profile({"dev-SupaBase", "prod", "default"})
 public class CustomAuthorizationFilterSupaBase extends CustomAuthorizationFilter {
-    private final UserServiceSupaBase userService;
+    private final UserService userService;
 
-    public CustomAuthorizationFilterSupaBase(UserServiceSupaBase userService) {
+    public CustomAuthorizationFilterSupaBase(UserService userService) {
         this.userService = userService;
     }
 

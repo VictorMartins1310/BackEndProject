@@ -44,7 +44,7 @@ public class ShoppingListControllerTest {
     @MockitoBean private UserService userService;
     @MockitoBean private TodoListMapper shoppingLMapper;
 
-    private final AppUser user = new AppUser("email@mail.com", "DumpPass1234");
+    private final AppUser user = new AppUser(UUID.randomUUID(), "email@mail.com");
     private final UUID userID = UUID.randomUUID();
     private final String
             marketNameIN = "ALDI",

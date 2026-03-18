@@ -3,7 +3,7 @@ package com.victor.bootcampproject.controllerTest;
 import com.victor.bootcampproject.controller.implement.AdminController;
 import com.victor.bootcampproject.dto.UserDetailsDTO;
 import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.service.UserServiceSupaBase;
+import com.victor.bootcampproject.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.DisplayName;
@@ -35,9 +35,9 @@ public class AdminControllerTest {
     @Autowired private WebApplicationContext webApplicationContext;
 
     @MockitoBean
-    private UserServiceSupaBase userService; //attention change here when mode is Local /MySQL To UserServiceLocal
+    private UserService userService; //attention change here when mode is Local /MySQL To UserServiceLocal
 
-    private final AppUser user = new AppUser("Admin@mail.de","badPassword");
+    private final AppUser user = new AppUser(UUID.randomUUID(), "Admin@mail.de");
 
     @BeforeEach public void setUp() {
     }
@@ -46,7 +46,7 @@ public class AdminControllerTest {
     @Test public void testGetAllUsers() throws Exception {
         List<AppUser> users = new ArrayList<>();
         users.add(user);
-        users.add(new AppUser("User@mail.de", "badPassword"));
+        users.add(new AppUser(UUID.randomUUID(), "User@mail.de"));
 
         when(userService.showUsers()).thenReturn(users);
 

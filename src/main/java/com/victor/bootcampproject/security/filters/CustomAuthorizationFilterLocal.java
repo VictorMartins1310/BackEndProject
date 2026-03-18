@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.service.UserServiceLocal;
+import com.victor.bootcampproject.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,9 +33,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @Profile({"dev-MySQL"})
 public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
-    private final UserServiceLocal userService;
+    private final UserService userService;
 
-    public CustomAuthorizationFilterLocal(UserServiceLocal userService) {
+    public CustomAuthorizationFilterLocal(UserService userService) {
         this.userService = userService;
     }
 

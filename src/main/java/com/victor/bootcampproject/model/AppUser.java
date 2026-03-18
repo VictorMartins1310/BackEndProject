@@ -22,6 +22,7 @@ public class AppUser {
     private UUID userID;
     @Column(unique=true) // for avoid get doubled email Address's
     private String email;
+    private String password;
     // User Details
     private String firstName;
     private String lastName;

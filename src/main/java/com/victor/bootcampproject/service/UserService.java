@@ -6,12 +6,14 @@ import com.victor.bootcampproject.repos.*;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
 
 @RequiredArgsConstructor
-public abstract class UserService{
+@Service
+public class UserService{
     protected final UserRepository userRepo;
     protected final RoleRepository roleRepository;
 
@@ -45,10 +47,6 @@ public abstract class UserService{
         return userRepo.save(user);
     }
 
-    public AppUserOld save(@NonNull AppUserOld user, String role){
-        user.addRole(addRole(role));
-        return userRepo.save(user);
-    }
 
 
 
@@ -60,17 +58,6 @@ public abstract class UserService{
      * @param password String
      * @return User User
      */
-    public AppUserOld newUser(String email, String password){
-        AppUserOld user = new AppUserOld(email, password);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return save(user, "ROLE_USER");
-    }
-
-    public AppUserOld newAdmin(String email, String password){
-        AppUserOld user = new AppUserOld(email, password);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return save(user, "ROLE_ADMIN");
-    }
 
     public AppUser newAdmin(UUID uuid, String email){
         AppUser user = new AppUser(uuid, email);
@@ -98,6 +85,14 @@ public abstract class UserService{
             throw new ProjectException("User Not Found");
         loggedUser.updateDetails(firstName, lastName, LocalDate.parse(birthDate));
         return userRepo.save(loggedUser);
+    }
+
+    public AppUser syncUserFromSupabase(UUID uuid, String email) {
+        Optional<AppUser> user = userRepo.getUserByUserID(uuid);
+        if (user.isPresent())
+            return user.get();
+        AppUser newUser = newUser(uuid, email);
+        return userRepo.save(newUser);
     }
 
     public void deleteUserByID(UUID userID){

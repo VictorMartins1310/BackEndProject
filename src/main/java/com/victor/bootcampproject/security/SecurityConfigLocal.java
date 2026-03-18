@@ -2,7 +2,7 @@ package com.victor.bootcampproject.security;
 
 import com.victor.bootcampproject.security.filters.CustomAuthenticationFilter;
 import com.victor.bootcampproject.security.filters.CustomAuthorizationFilterLocal;
-import com.victor.bootcampproject.service.UserServiceLocal;
+import com.victor.bootcampproject.service.UserService;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +25,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
  */
 @Configuration
 @EnableWebSecurity
-@Profile("dev-MySQL")
+@Profile({ "dev-MySQL", "dev-h2" })
 public class SecurityConfigLocal extends SecurityConfig {
-    private final UserServiceLocal userService;
+    private final UserService userService;
 
-    public SecurityConfigLocal(AuthenticationManagerBuilder authManagerBuilder, UserServiceLocal userService) {
+    public SecurityConfigLocal(AuthenticationManagerBuilder authManagerBuilder, UserService userService) {
         super(authManagerBuilder);
         this.userService = userService;
     }

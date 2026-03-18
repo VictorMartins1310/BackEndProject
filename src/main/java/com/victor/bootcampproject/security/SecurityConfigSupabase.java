@@ -1,11 +1,10 @@
 package com.victor.bootcampproject.security;
 
 import com.victor.bootcampproject.security.filters.CustomAuthorizationFilterSupaBase;
-import com.victor.bootcampproject.service.UserServiceSupaBase;
+import com.victor.bootcampproject.service.UserService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import org.springframework.context.annotation.Profile;
@@ -28,9 +26,9 @@ import org.springframework.context.annotation.Profile;
 @Profile({"dev-SupaBase", "prod", "default" })
 public class SecurityConfigSupabase extends SecurityConfig {
 
-    private final UserServiceSupaBase userService;
+    private final UserService userService;
 
-    public SecurityConfigSupabase(AuthenticationManagerBuilder authManagerBuilder, UserServiceSupaBase userService) {
+    public SecurityConfigSupabase(AuthenticationManagerBuilder authManagerBuilder, UserService userService) {
         super(authManagerBuilder);
         this.userService = userService;
     }
@@ -55,9 +53,6 @@ public class SecurityConfigSupabase extends SecurityConfig {
         // disable CSRF protection
         http.csrf(csrf -> csrf.disable());
 
-        http.cors(Customizer.withDefaults());  // CORS aktivieren
-
-        http.headers(headers -> headers.frameOptions().disable()); // for H2-console
         // set the session creation policy to stateless
         http.sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
         // set up authorization for different request matchers and user roles
@@ -65,10 +60,13 @@ public class SecurityConfigSupabase extends SecurityConfig {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(listOfPermitAll).permitAll()
 
+                .requestMatchers(listOfUser).hasAnyAuthority("ROLE_USER")
+                /*
                 .requestMatchers(GET, listOfUser).hasAnyAuthority("ROLE_USER")
                 .requestMatchers(POST, listOfUser).hasAnyAuthority("ROLE_USER")
                 .requestMatchers(PATCH, listOfUser).hasAnyAuthority("ROLE_USER")
                 .requestMatchers(DELETE, listOfUser).hasAnyAuthority("ROLE_USER")
+                 */
 
                 .requestMatchers("/api/admin/users").hasAnyAuthority("ROLE_ADMIN")
 
