@@ -1,7 +1,6 @@
 package com.victor.bootcampproject.repos;
 
-import com.victor.bootcampproject.model.ShoppingList;
-import com.victor.bootcampproject.model.AppUser;
+import com.victor.bootcampproject.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

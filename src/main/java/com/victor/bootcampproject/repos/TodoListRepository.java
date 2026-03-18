@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TodoListRepository extends JpaRepository<TodoItem, Long> {
     List<TodoItem> findAllByUser(AppUser user);
+    List<TodoItem> findAllByUserAndCompleted(AppUser user, boolean completed);
 }

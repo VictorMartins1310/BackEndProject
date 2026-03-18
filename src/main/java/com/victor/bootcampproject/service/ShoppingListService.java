@@ -2,9 +2,6 @@ package com.victor.bootcampproject.service;
 
 import com.victor.bootcampproject.exception.ProjectException;
 import com.victor.bootcampproject.model.*;
-import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.model.Product;
-import com.victor.bootcampproject.model.ShoppingList;
 import com.victor.bootcampproject.repos.ShoppingListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
