@@ -1,9 +1,7 @@
 package com.victor.bootcampproject.service;
 
 import com.victor.bootcampproject.exception.ProjectException;
-import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.model.Frequency;
-import com.victor.bootcampproject.model.Task;
+import com.victor.bootcampproject.model.*;
 import com.victor.bootcampproject.repos.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -20,7 +18,9 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     public Task newTask(AppUser user, @NonNull Task task){
-        Task newTask = new Task(task.getTask(), task.getFrequency());
+        Task newTask = new Task();
+        newTask.setTask(task.getTask());
+        newTask.setFrequency(task.getFrequency());
         newTask.setUser(user);
         return taskRepository.save(newTask);
     }

@@ -31,11 +31,6 @@ public class AppUser {
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
-    public AppUser(@NonNull String email) {
-        setUserID(UUID.randomUUID());
-        setEmail(email);
-    }
-
     public AppUser(UUID userID, @NonNull String email) {
         setUserID(userID);
         setEmail(email);

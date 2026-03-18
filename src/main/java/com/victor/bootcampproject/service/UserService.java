@@ -1,10 +1,8 @@
 package com.victor.bootcampproject.service;
 
 import com.victor.bootcampproject.exception.ProjectException;
-import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.model.Role;
-import com.victor.bootcampproject.repos.RoleRepository;
-import com.victor.bootcampproject.repos.UserRepository;
+import com.victor.bootcampproject.model.*;
+import com.victor.bootcampproject.repos.*;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +21,7 @@ public abstract class UserService{
     /**  Injects a bean of type PasswordEncoder into this class.
      * The bean is used for encoding passwords before storing them.
      */
-    private final PasswordEncoder passwordEncoder;
+    protected final PasswordEncoder passwordEncoder;
     // Method Section
     public long qtyUsers(){ return userRepo.count(); }
 
@@ -42,22 +40,17 @@ public abstract class UserService{
             return roleRepository.findByRole(name).get();
     }
 
-
     public AppUser save(@NonNull AppUser user, String role){
         user.addRole(addRole(role));
         return userRepo.save(user);
     }
 
-    public AppUser newAdmin(String email, String password){
-        AppUser user = new AppUser(email, password);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return save(user, "ROLE_ADMIN");
+    public AppUserOld save(@NonNull AppUserOld user, String role){
+        user.addRole(addRole(role));
+        return userRepo.save(user);
     }
 
-    public AppUser newAdmin(String email){
-        AppUser user = new AppUser(email);
-        return save(user, "ROLE_ADMIN");
-    }
+
 
     /** Creates a new User
      * In case don't exist a User it will create a User with ADMIN ROLE
@@ -67,22 +60,25 @@ public abstract class UserService{
      * @param password String
      * @return User User
      */
-    public AppUser newUser(String email, String password){
-        AppUser user = new AppUser(email, password);
-        user.setUserID(UUID.randomUUID());
+    public AppUserOld newUser(String email, String password){
+        AppUserOld user = new AppUserOld(email, password);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return save(user, "ROLE_USER");
     }
 
-    public AppUser newUser(UUID uuid, String email, String password){
-        AppUser user = new AppUser(email, password);
-        user.setUserID(uuid);
-        return save(user, "ROLE_USER");
+    public AppUserOld newAdmin(String email, String password){
+        AppUserOld user = new AppUserOld(email, password);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return save(user, "ROLE_ADMIN");
+    }
+
+    public AppUser newAdmin(UUID uuid, String email){
+        AppUser user = new AppUser(uuid, email);
+        return save(user, "ROLE_ADMIN");
     }
 
     public AppUser newUser(UUID uuid, String email){
-        AppUser user = new AppUser(email);
-        user.setUserID(uuid);
+        AppUser user = new AppUser(uuid, email);
         return save(user, "ROLE_USER");
     }
 
@@ -108,6 +104,7 @@ public abstract class UserService{
         AppUser user = getUserByUserID(userID);
         if (user == null)
             throw new ProjectException("User not Found");
+        // Todo delete TodoItems
         //taskListService.deleteTasksLists(user);
         shoppingListService.deleteShoppingLists(user);
         userRepo.delete(user);
