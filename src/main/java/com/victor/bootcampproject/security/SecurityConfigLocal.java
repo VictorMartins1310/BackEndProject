@@ -27,11 +27,9 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @Profile({ "dev-MySQL", "dev-h2" })
 public class SecurityConfigLocal extends SecurityConfig {
-    private final UserService userService;
 
-    public SecurityConfigLocal(AuthenticationManagerBuilder authManagerBuilder, UserService userService) {
-        super(authManagerBuilder);
-        this.userService = userService;
+    public SecurityConfigLocal(UserService userService, AuthenticationManagerBuilder authManagerBuilder) {
+        super(userService, authManagerBuilder);
     }
 
     /**  Bean definition for PasswordEncoder

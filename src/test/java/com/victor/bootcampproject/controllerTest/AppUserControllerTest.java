@@ -4,9 +4,8 @@ import com.victor.bootcampproject.controller.implement.UserControllerImpl;
 import com.victor.bootcampproject.dto.LoginDTO;
 import com.victor.bootcampproject.dto.UserDetailsDTO;
 import com.victor.bootcampproject.mappers.UserDetailsMapper;
-import com.victor.bootcampproject.model.AppUser;
-import com.victor.bootcampproject.model.Role;
-import com.victor.bootcampproject.service.UserService;
+import com.victor.bootcampproject.model.*;
+import com.victor.bootcampproject.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,8 +45,8 @@ public class AppUserControllerTest {
             firstName = "Victor",
             lastName = "Martins";
 
-    private final AppUser user1 = new AppUser("email@mail.com", "Test.1234");
-    private final AppUser user2 = new AppUser("other@mail.com", "Pass.1234");
+    private final AppUser user1 = new AppUser(UUID.randomUUID(),"email@mail.com");
+    private final AppUser user2 = new AppUser(UUID.randomUUID(),"other@mail.com");
     private final Role role = new Role();
 
     @BeforeEach
@@ -76,7 +75,7 @@ public class AppUserControllerTest {
 
         userDto1.setEmail(user1.getEmail()); userDto2.setEmail(user2.getEmail());
 
-        when(userDetailsMapper.toDto(userService.newUser("email@mail.com", "PassWORTd"))).thenReturn(userDto1);
+        when(userDetailsMapper.toDto(userService.newUser(UUID.randomUUID(),"email@mail.com"))).thenReturn(userDto1);
 
         mockMvc.perform(
                 post("/api/users/register")

@@ -1,5 +1,6 @@
 package com.victor.bootcampproject.security;
 
+import com.victor.bootcampproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public abstract class SecurityConfig {
+    protected final UserService userService;
     // Instance of the AuthenticationManagerBuilder
     protected final AuthenticationManagerBuilder authManagerBuilder;
 

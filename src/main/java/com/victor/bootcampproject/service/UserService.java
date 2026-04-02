@@ -36,9 +36,9 @@ public class UserService{
      * @return new Role
      */
     public Role addRole(String name){
-        if (roleRepository.findByRole(name).isEmpty()) {
+        if (roleRepository.findByRole(name).isEmpty())
             return roleRepository.save(new Role(name));
-        }else
+        else
             return roleRepository.findByRole(name).get();
     }
 
@@ -46,9 +46,6 @@ public class UserService{
         user.addRole(addRole(role));
         return userRepo.save(user);
     }
-
-
-
 
     /** Creates a new User
      * In case don't exist a User it will create a User with ADMIN ROLE

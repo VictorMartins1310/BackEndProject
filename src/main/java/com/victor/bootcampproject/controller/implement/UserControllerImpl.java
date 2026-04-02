@@ -2,7 +2,6 @@ package com.victor.bootcampproject.controller.implement;
 
 import com.victor.bootcampproject.controller.UserController;
 import com.victor.bootcampproject.dto.UserDetailsDTO;
-import com.victor.bootcampproject.dto.LoginDTO;
 import com.victor.bootcampproject.mappers.UserDetailsMapper;
 import com.victor.bootcampproject.model.*;
 import com.victor.bootcampproject.service.*;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(name = "users", value = "api/users")
 @Profile({ "dev-MySQL", "dev-h2" })
 public class UserControllerImpl implements UserController {
-    private final UserServiceLocal userService;
+    private final UserService userService;
     private final UserDetailsMapper userDetailsMapper;
 
     // private fields
@@ -33,12 +32,13 @@ public class UserControllerImpl implements UserController {
     private AppUser getAuthUser() {
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
-
+/* Todo Remove this not need anymore
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDetailsDTO newUser(@RequestBody LoginDTO loginData){
         return userDetailsMapper.toDto(userService.newUser(loginData.getEmail(), loginData.getPassword()));
     }
+ */
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

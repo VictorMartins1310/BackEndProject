@@ -32,7 +32,7 @@ public class ProductControllerImpl implements ProductController {
         return shoppingLMapper.toDTO(shoppingService.addProduct2List(todoID, product));
     }
 
-    // A get Product dont make sense here, it makes sense get All Products but make sense Update a Product
+    // A get Product don't make sense here, it makes sense get All Products but make sense Update a Product
 
     @Override
     @PatchMapping(value = "/products/{idOfProduct}/bought")
