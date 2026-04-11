@@ -32,13 +32,6 @@ public class UserControllerImpl implements UserController {
     private AppUser getAuthUser() {
         return userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
-/* Todo Remove this not need anymore
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDetailsDTO newUser(@RequestBody LoginDTO loginData){
-        return userDetailsMapper.toDto(userService.newUser(loginData.getEmail(), loginData.getPassword()));
-    }
- */
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

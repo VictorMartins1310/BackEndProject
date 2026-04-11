@@ -1,15 +1,12 @@
 package com.victor.bootcampproject.controllerTest;
 
 import com.victor.bootcampproject.controller.implement.UserControllerImpl;
-import com.victor.bootcampproject.dto.LoginDTO;
-import com.victor.bootcampproject.dto.UserDetailsDTO;
+import com.victor.bootcampproject.dto.*;
 import com.victor.bootcampproject.mappers.UserDetailsMapper;
 import com.victor.bootcampproject.model.*;
 import com.victor.bootcampproject.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,7 +21,6 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -63,27 +59,6 @@ public class AppUserControllerTest {
         user2.setLastName(lastName);
         user2.setBirthDate(birthdate);
         user2.addRole(role);
-    }
-
-    @DisplayName("Test: Adding new Users")
-    @WithMockUser(username = "testUser", roles = "USER")
-    @Test public void testCreateUser() throws Exception {
-        LoginDTO loginDto = new LoginDTO();
-        loginDto.setEmail(user1.getEmail()); loginDto.setPassword(user1.getPassword());
-
-        UserDetailsDTO userDto1 = new UserDetailsDTO(); UserDetailsDTO userDto2 = new UserDetailsDTO();
-
-        userDto1.setEmail(user1.getEmail()); userDto2.setEmail(user2.getEmail());
-
-        when(userDetailsMapper.toDto(userService.newUser(UUID.randomUUID(),"email@mail.com"))).thenReturn(userDto1);
-
-        mockMvc.perform(
-                post("/api/users/register")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginDto)))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(objectMapper.writeValueAsString(userDto1)));
     }
 
     @DisplayName("Test: Get UsersDetails")
