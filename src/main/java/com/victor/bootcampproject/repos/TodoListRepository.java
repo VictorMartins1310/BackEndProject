@@ -4,9 +4,11 @@ import com.victor.bootcampproject.model.TodoItem;
 import com.victor.bootcampproject.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TodoListRepository extends JpaRepository<TodoItem, Long> {
     List<TodoItem> findAllByUser(AppUser user);
     List<TodoItem> findAllByUserAndCompleted(AppUser user, boolean completed);
+    List<TodoItem> findAllByUserAndDoOnDay(AppUser user, LocalDateTime date);
 }

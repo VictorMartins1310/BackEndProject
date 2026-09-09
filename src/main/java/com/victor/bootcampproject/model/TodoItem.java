@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.*;
 
 @Data
 @Entity
@@ -15,8 +15,8 @@ public abstract class TodoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long todoID;
-    private Date creationDate = new Date();
-    private Date doOnDay = new Date();
+    private LocalDate creationDate = LocalDate.now();
+    private LocalDateTime doOnDay = LocalDateTime.now();
     /** True means Done, False to be Do */
     private Boolean completed = false;
 

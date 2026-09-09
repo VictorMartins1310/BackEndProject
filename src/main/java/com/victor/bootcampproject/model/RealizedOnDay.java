@@ -1,10 +1,9 @@
 package com.victor.bootcampproject.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,5 +13,5 @@ public class RealizedOnDay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date realizedOn;
+    private LocalDateTime realizedOn;
 }

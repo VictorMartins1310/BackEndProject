@@ -20,27 +20,49 @@ public class TodoListControllerImpl implements TodoListController {
 
     // On this Controller is not so much to do
     private final TodoItemService toDoListService;
-    //private final UserService userService;
     private final TodoListMapper todoListMapper;
 
     private final UserService userService;
 
     /**
-     * Method that show all Lists that a User haves
+     * Return All TodoListItems by the Authenticated User
+     * @param loggedUser Authenticated user
+     * @return DTO TodoList
      */
-//    @GetMapping
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<ToDoListDTO> getAllTodoLists(@AuthenticationPrincipal AppUser loggedUser) {
-//        return todoListMapper.toDto(toDoListService.getAllItems(loggedUser));
-//    }
+    public List<ToDoListDTO> getAllTodoItems(AppUser loggedUser){
+        return todoListMapper.toDto(toDoListService.getAllItems(loggedUser));
+    }
+
+    /**
+     * Return All undone TodoListItems by the Authenticated User
+     * @param loggedUser Authenticated user
+     * @return DTO TodoList
+     */
+    public List<ToDoListDTO> getAllUndoneTodoItems(AppUser loggedUser){
+        return todoListMapper.toDto(toDoListService.getItemsNotDone(loggedUser));
+    }
+
+    /**
+     * Return All completed Tasks by the Authenticated User
+     * @param loggedUser Authenticated user
+     * @return DTO TodoList
+     */
+    public List<ToDoListDTO> getAllDoneTodoItems(AppUser loggedUser){
+        return todoListMapper.toDto(toDoListService.getItemsDone(loggedUser));
+    }
+
+    public List<ToDoListDTO> getAllOnDate(AppUser loggedUser, String date){
+        return todoListMapper.toDto(toDoListService.getAllOnDate(loggedUser, date));
+    }
+
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ToDoListDTO> getTodoLists(@AuthenticationPrincipal AppUser loggedUser, @RequestParam(required = true, value = "completed", defaultValue = "2") int completed) {
         if (completed == 0)
-            return todoListMapper.toDto(toDoListService.getItemsDone(loggedUser));
+            return getAllDoneTodoItems(loggedUser);
         if (completed == 1)
-            return todoListMapper.toDto(toDoListService.getItemsNotDone(loggedUser));
-        return todoListMapper.toDto(toDoListService.getAllItems(loggedUser));
+            return getAllUndoneTodoItems(loggedUser);
+        return getAllTodoItems(loggedUser);
     }
 }
