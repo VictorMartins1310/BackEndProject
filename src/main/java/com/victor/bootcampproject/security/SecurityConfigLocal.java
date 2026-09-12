@@ -28,8 +28,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Profile({ "dev-MySQL", "dev-h2" })
 public class SecurityConfigLocal extends SecurityConfig {
 
-    public SecurityConfigLocal(UserService userService, AuthenticationManagerBuilder authManagerBuilder) {
-        super(userService, authManagerBuilder);
+    public SecurityConfigLocal(UserService userService, AuthenticationManagerBuilder authManagerBuilder, SupabaseConfig config) {
+        super(userService, authManagerBuilder, config);
     }
 
     /**  Bean definition for PasswordEncoder
@@ -77,7 +77,7 @@ public class SecurityConfigLocal extends SecurityConfig {
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.
-        http.addFilterBefore(new CustomAuthorizationFilterLocal(userService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilterLocal(userService, dbConfig), UsernamePasswordAuthenticationFilter.class);
 
         // Build the security filter chain to be returned.
         return http.build();

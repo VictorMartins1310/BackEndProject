@@ -27,8 +27,8 @@ import org.springframework.context.annotation.Profile;
 @Profile({"dev-SupaBase", "prod", "default" })
 public class SecurityConfigSupabase extends SecurityConfig {
 
-    public SecurityConfigSupabase(UserService userService, AuthenticationManagerBuilder authManagerBuilder) {
-        super(userService, authManagerBuilder);
+    public SecurityConfigSupabase(UserService userService, AuthenticationManagerBuilder authManagerBuilder, SupabaseConfig conf) {
+        super(userService, authManagerBuilder, conf);
     }
 
     /**  Bean definition for PasswordEncoder
@@ -67,7 +67,7 @@ public class SecurityConfigSupabase extends SecurityConfig {
                 .anyRequest().authenticated());
         // Add the custom authorization filter before the standard authentication filter.
 
-        http.addFilterBefore(new CustomAuthorizationFilterSupaBase(userService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilterSupaBase(userService, dbConfig), UsernamePasswordAuthenticationFilter.class);
 
 
         // Build the security filter chain to be returned.

@@ -26,9 +26,15 @@ import java.security.spec.ECPublicKeySpec;
 import java.util.Base64;
 
 public abstract class CustomAuthorizationFilter extends OncePerRequestFilter {
+    protected final SupabaseConfig dbConfig;
+
+    public CustomAuthorizationFilter(SupabaseConfig supabaseConfig) {
+        this.dbConfig = supabaseConfig;
+    }
+
     // Todo -> JavaDoc for this function
-    protected ECPublicKey loadPublicKey(String kid) throws Exception {
-        URL url = new URL( SupabaseConfig.SUPABASE_URL+ "/auth/v1/.well-known/jwks.json");
+    protected ECPublicKey loadPublicKey(String kid, String connectionURL) throws Exception {
+        URL url = new URL(connectionURL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
@@ -75,7 +81,7 @@ public abstract class CustomAuthorizationFilter extends OncePerRequestFilter {
      * @param token
      * @return
      */
-    protected Algorithm getAlgorithm(@NonNull String token) throws Exception {
+    protected Algorithm getAlgorithm(@NonNull String token, String connectionURL) throws Exception {
         String algorithmType = "";
         if (token.split("\\.").length == 3) {
             String headerJson = new String(Base64.getUrlDecoder().decode(token.split("\\.")[0]));
@@ -91,7 +97,7 @@ public abstract class CustomAuthorizationFilter extends OncePerRequestFilter {
                 case "ES256":                   //Supabase
                     DecodedJWT decoded = JWT.decode(token);
                     String kid = decoded.getKeyId();
-                    ECPublicKey publicKey = loadPublicKey(kid);
+                    ECPublicKey publicKey = loadPublicKey(kid, dbConfig.SUPABASE_JWKS_URl);
                     return Algorithm.ECDSA256(publicKey, null);
                 case "HS384":
                     return Algorithm.HMAC384("secret".getBytes());

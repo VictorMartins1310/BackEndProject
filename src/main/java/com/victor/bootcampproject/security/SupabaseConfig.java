@@ -1,15 +1,22 @@
 package com.victor.bootcampproject.security;
 
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @NoArgsConstructor
+@Component
+@ConfigurationProperties(prefix = "supabase") // reminder: is for getting supabase data from yaml files
 public class SupabaseConfig {
-    private static String PROJECT = "nltqgtftdcbzdbgubmoa";
-    public static String
-            SUPABASE_URL = "https://" + PROJECT + ".supabase.co",
-            SUPABASE_JWKS_URl = SUPABASE_URL + "/auth/v1/.well-known/jwks.json",
-            SUPABASE_API_KEY =          "sb_publishable_bc_6MUmplE8MJ16VQvwHlA_Jk3F8ogx",
-            SUPABASE_publishable_KEY =  "sb_publishable_bc_6MUmpIe8MJ16VQvwHLA_Jk3F8ogx",
-            SUPABASE_service_Role_Key = "sb_secret_W4sOlOu7xXRKbLniDtRUoA_3omIpv7G",
-            SUPABASE_ANON_KEY =          "sb_secret_W4sOlOu7xXRKbLniDtRUoA_3omIpv7G";
+    public String project, SUPABASE_URL, SUPABASE_JWKS_URl;
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+        SUPABASE_URL = "https://" + project + ".supabase.co";
+        SUPABASE_JWKS_URl = SUPABASE_URL + "/auth/v1/.well-known/jwks.json";
+    }
 }

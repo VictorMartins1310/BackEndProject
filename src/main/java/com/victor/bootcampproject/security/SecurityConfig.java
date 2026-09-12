@@ -19,6 +19,7 @@ public abstract class SecurityConfig {
     protected final UserService userService;
     // Instance of the AuthenticationManagerBuilder
     protected final AuthenticationManagerBuilder authManagerBuilder;
+    protected final SupabaseConfig dbConfig;
 
     protected String[]
             listOfPermitAll = {

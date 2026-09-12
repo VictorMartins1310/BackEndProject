@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victor.bootcampproject.model.AppUser;
+import com.victor.bootcampproject.security.SupabaseConfig;
 import com.victor.bootcampproject.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,7 +36,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
     private final UserService userService;
 
-    public CustomAuthorizationFilterLocal(UserService userService) {
+    public CustomAuthorizationFilterLocal(UserService userService, SupabaseConfig config) {
+        super(config);
         this.userService = userService;
     }
 
@@ -63,7 +65,7 @@ public class CustomAuthorizationFilterLocal extends CustomAuthorizationFilter {
                 try {
                     // If the authorization header is present, get the token
                     String token = authorizationHeader.substring("Bearer ".length());
-                    Algorithm algorithm = getAlgorithm(token);
+                    Algorithm algorithm = getAlgorithm(token, dbConfig.SUPABASE_JWKS_URl);
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
