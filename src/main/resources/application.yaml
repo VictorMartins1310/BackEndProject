@@ -4,3 +4,9 @@ spring:
 
 server:
   port: 8710
+
+supabase:
+  project: wbyfphzobmooqfnolkgw
+  password: Pass8bad!word@26
+  API_KEY: sb_publishable_bc_6MUmplE8MJ16VQvwHlA_Jk3F8ogx
+  ANON_KEY: sb_secret_W4sOlOu7xXRKbLniDtRUoA_3omIpv7G"
